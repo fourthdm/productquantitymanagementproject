@@ -1,0 +1,177 @@
+<div class="container">
+    <br><br><br>
+    <h2><b>Create Sales Order</b></h2>
+
+    <div class="row">
+        <div class="">
+            <form [formGroup]="AddSalesaOrderform">
+                <br>
+                <div class="card">
+                    <div class="card-body">
+                        <h4><b>1. Customer Details</b></h4>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="Customer_Name">Customer Name <sup>*</sup></label>
+                                <br>
+                                <select class="form-control" formControlName="Customer_Name" [ngClass]="{'is-invalid': (submitted || AddSalesaOrderform.get('Customer_Name')?.touched) &&
+                    AddSalesaOrderform.get('Customer_Name')?.invalid }">
+                                    <option value="">-- Select Customer Name --</option>
+                                    <option *ngFor="let Cust of AllCustomerData" [value]="Cust.Customer_Name">
+                                        {{Cust.Customer_Name}}</option>
+                                </select>
+                                <div class="invalid-feedback" *ngIf="(submitted || AddSalesaOrderform.get('Customer_Name')?.touched) &&
+                    AddSalesaOrderform.get('Customer_Name')?.errors?.['required']">
+                                    Customer Name is required
+                                </div>
+                                <br>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Company Name <sup>*</sup></label>
+                                <input class="form-control" formControlName="Company_Name" [ngClass]="{'is-invalid': (submitted || AddSalesaOrderform.get('Company_Name')?.touched) &&
+                    AddSalesaOrderform.get('Company_Name')?.invalid }">
+                                <div class="invalid-feedback" *ngIf="(submitted || AddSalesaOrderform.get('Company_Name')?.touched) &&
+                    AddSalesaOrderform.get('Company_Name')?.errors?.['required']">
+                                    Company Name is required
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Company Address<sup>*</sup></label>
+                                <input class="form-control" formControlName="Company_Address" [ngClass]="{'is-invalid': (submitted || AddSalesaOrderform.get('Company_Address')?.touched) &&
+                    AddSalesaOrderform.get('Company_Address')?.invalid }">
+                                <div class="invalid-feedback" *ngIf="(submitted || AddSalesaOrderform.get('Company_Address')?.touched) &&
+                    AddSalesaOrderform.get('Company_Address')?.errors?.['required']">
+                                    Company Address is required
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Company GST No.<sup>*</sup></label>
+                                <input class="form-control" formControlName="GST_No" [ngClass]="{'is-invalid': (submitted || AddSalesaOrderform.get('GST_No')?.touched) &&
+                    AddSalesaOrderform.get('GST_No')?.invalid }">
+                                <div class="invalid-feedback" *ngIf="(submitted || AddSalesaOrderform.get('GST_No')?.touched) &&
+                    AddSalesaOrderform.get('GST_No')?.errors?.['required']">
+                                    Company GST_NO is required
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label>Delivery Address</label>
+                                <input class="form-control" formControlName="Delivery_Address">
+                            </div>
+
+                        </div>
+                        <br>
+                    </div>
+                    <br>
+                </div>
+                <br>
+                <div class="card">
+                    <div class="card-body">
+                        <h4><b>2. Products</b></h4>
+                        <div formArrayName="items">
+
+                            <div *ngFor="let product of items.controls; let i = index" [formGroupName]="i"
+                                class="row mb-3">
+
+                                <div class="col-md-3">
+                                    <label>Product Name</label>
+                                    <input class="form-control" formControlName="Product_Name" placeholder="Product"
+                                        (change)="onProductNameChange(i)">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>HSN Code</label>
+                                    <input class="form-control" formControlName="HSN_Code" placeholder="HSN">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>Product Quantity</label>
+                                    <input type="number" class="form-control" formControlName="Ordered_Quantity" min="0"
+                                        (input)="calculateItem(i)">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>Rate</label>
+                                    <input type="number" class="form-control" formControlName="Rate" min="0"
+                                        (input)="calculateItem(i)">
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>Subtotal</label>
+                                    <input type="number" class="form-control" formControlName="SubTotal" readonly>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <label>Action</label>
+                                    <button class="btn btn-danger" type="button" (click)="removeProduct(i)">
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-success" type="button" (click)="addItem()">
+                            Add Product
+                        </button>
+
+                        <div class="Discount">
+                            <div class="">
+                                <label for="Discount_Amount">Discount Amount</label>
+                                <input type="number" class="form-control" placeholder="Discount_Amount"
+                                    formControlName="Discount_Amount">
+                            </div>
+                        </div>
+
+                        <div class="Discount">
+                            <div class="">
+                                <label for="Sub_Total">SubTotal Amount</label>
+                                <input type="number" class="form-control" placeholder="" formControlName="Sub_Total"
+                                    readonly>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br>
+                </div>
+                <br>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h4><b>3. Details </b></h4>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Remark</label>
+                                <textarea class="form-control" formControlName="Remark"></textarea>
+                                <br>
+                            </div><br>
+
+                            <div class="col-md-6">
+                                <label>Sales Order Status</label>
+                                <select class="form-control" formControlName="Sales_Order_Status">
+                                    <option value="">-- Select Sales Order Status --</option>
+                                    <option value="Generate">Generate</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Status Pending">Status Pending</option>
+                                    <option value="Confirm">Confirm</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select> <br>
+                                <br>
+                            </div><br>
+                        </div>
+                    </div> <br>
+                </div>
+                <br>
+
+                <div class="text-end">
+                    <button class="btn btn-primary btn-lg" type="button" (click)="saveChallan()">
+                        Create Sales Order
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

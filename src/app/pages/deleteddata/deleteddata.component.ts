@@ -1,0 +1,104 @@
+import { Component } from '@angular/core';
+import { RestService } from 'src/app/services/rest.service';
+
+@Component({
+  selector: 'app-deleteddata',
+  templateUrl: './deleteddata.component.html',
+  styleUrls: ['./deleteddata.component.css']
+})
+export class DeleteddataComponent {
+  constructor(private _rest: RestService) { }
+  AllDeletionHistory: any[] = [];
+  AllInletDeletionHistory: any[] = [];
+  AllVendorDeletionHistory: any[] = [];
+  AllCustomerDeletionHistory: any[] = [];
+  AllAdminDeletionHistory: any[] = [];
+  AllSalesOrder: any[] = [];
+
+  ngOnInit(): void {
+    this.GetDeletionHistory();
+    this.GetInletDeletionHistory();
+    this.GetVendorDeletionHistory();
+    this.GetCustomerDeletionhistory();
+    this.GetAdminDeletionhistory();
+    this.GetSalesOrderDeletionHistory();
+  }
+
+  GetDeletionHistory() {
+    this._rest.VendorChallanDeletionHistory().subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.AllDeletionHistory = res.data;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  GetInletDeletionHistory() {
+    this._rest.InletChallanDeletionHistory().subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.AllInletDeletionHistory = res.data;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  GetVendorDeletionHistory() {
+    this._rest.VendorDeletionHistory().subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.AllVendorDeletionHistory = res.data;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  GetCustomerDeletionhistory() {
+    this._rest.CustomerDeletionHistory().subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.AllCustomerDeletionHistory = res.data;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  GetAdminDeletionhistory() {
+    this._rest.AdminDeletionHistory().subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.AllAdminDeletionHistory = res.data;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  GetSalesOrderDeletionHistory() {
+    this._rest.SalesOrderDeletionHistory().subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          this.AllSalesOrder = res.data;
+        }
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+}
