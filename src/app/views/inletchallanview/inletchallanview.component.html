@@ -140,12 +140,7 @@
                                     <label for="Customer_Name">Customer Name</label>
                                     <br>
                                     <input class="form-control" formControlName="Customer_Name">
-                                    <!-- <select class="form-control" formControlName="Customer_Name">
-                                        
-                                        <option value="">-- Select Customer Name --</option>
-                                        <option *ngFor="let Cust of AllCustomerData" [value]="Cust.Customer_Name">
-                                            {{Cust.Customer_Name}}</option>
-                                    </select> <br> -->
+                                 
                                 </div>
 
                                 <div class="col-md-4">
@@ -240,56 +235,6 @@
                                     Add New Product
                                 </button>
                             </div>
-
-                            <!-- <div formArrayName="items">
-
-                                <div *ngFor="let product of items.controls; let i=index" [formGroupName]="i"
-                                    class="border rounded p-3 mb-3">
-
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <label>Product Name</label>
-                                            <input class="form-control" formControlName="Product_Name">
-                                        </div>
-
-                                        <div class="col-md-2">
-                                            <label>HSN Code</label>
-                                            <input class="form-control" formControlName="HSN_Code">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label>Qty</label>
-                                            <input type="number" class="form-control" formControlName="Product_Quantity"
-                                                (input)="calculateSubtotal(i)">
-                                        </div>
-
-                                        <div class="col-md-2">
-                                            <label>Rate</label>
-                                            <input type="number" class="form-control" formControlName="Rate"
-                                                (input)="calculateSubtotal(i)">
-                                        </div>
-
-                                        <div class="col-md-2">
-                                            <label>Subtotal</label>
-                                            <input class="form-control" formControlName="SubTotal" readonly>
-                                        </div>
-
-                                        <div class="col-md-1 d-flex align-items-end">
-
-                                            <button class="btn btn-danger" type="button" (click)="removeProduct(i)">
-
-                                                <i class="fa fa-trash"></i>
-
-                                            </button>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-                                <button class="btn btn-success" type="button" (click)="addProduct()">
-                                    Add New Product
-                                </button>
-                            </div> -->
 
                             <div class="Discount">
                                 <div class="">
@@ -614,36 +559,66 @@
     </div>
 </div>
 
-
-
 <div class="modal fade" id="deleteVendorModal">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <div class="modal-header">
-                <h5>Delete Challan</h5>
+                <h5 class="modal-title">
+                    Delete Challan
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
             </div>
 
             <div class="modal-body">
-                <label>Enter Admin Password</label>
-                <!-- <input type="password" class="form-control" [(ngModel)]="adminPassword"> -->
-                <div class="input-group mb-3">
-                    <input [type]="liked ? 'password' : 'adminPassword'" type="Password" class="form-control"
-                        [(ngModel)]="adminPassword" placeholder="Enter Password" required>
-                    <span class="btn btn-outline-secondary" type="" [ngClass]="{
-                                                        'fa-eye-slash': !liked,
-                                                        'fa-eye': liked }" (click)="Show()" id="button-addon2"><i
-                            class="fa-solid fa-eye-slash"></i>
-                    </span>
+                <!-- Warning -->
+                <div class="alert alert-warning">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <!-- This action cannot be undone. -->
+                    Please enter the admin password and deletion reason.
+                </div>
+                <!-- Password -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        Admin Password <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <input [type]="liked ? 'text' : 'password'" class="form-control" [(ngModel)]="adminPassword"
+                            placeholder="Enter Admin Password" autocomplete="off">
+                        <button type="button" class="btn btn-outline-secondary" (click)="Show()">
+                            <i class="fa-solid" [ngClass]="liked ? 'fa-eye' : 'fa-eye-slash'">
+                            </i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Deletion Reason -->
+                <div class="mb-3">
+                    <label class="form-label">
+                        Reason for Deletion
+                        <span class="text-danger">*</span>
+                    </label>
+                    <textarea class="form-control" rows="4" [(ngModel)]="deletionReason"
+                        placeholder="Enter reason for deleting this challan" maxlength="500">
+                    </textarea>
+                    <small class="text-muted">
+                        {{ deletionReason.length || 0 }}/500 characters
+                    </small>
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     Cancel
                 </button>
-            </div>
 
+                <button type="button" class="btn btn-danger" (click)="DeleteChallan()" [disabled]="isDeleting">
+                    <span *ngIf="isDeleting" class="spinner-border spinner-border-sm me-2">
+                    </span>
+                    {{ isDeleting ? 'Deleting...' : 'Delete Challan' }}
+                </button>
+            </div>
         </div>
+
     </div>
 </div>

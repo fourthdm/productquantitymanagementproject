@@ -13,7 +13,6 @@ declare var bootstrap: any;
 export class InletchallanviewComponent {
 
   AllChallan: any[] = [];
-
   Updateinletchallanfrom: FormGroup;
 
   constructor(private _rest: RestService, private fb: FormBuilder, private _activatedroute: ActivatedRoute) {
@@ -187,6 +186,7 @@ export class InletchallanviewComponent {
   removeProduct(index: number) {
     this.items.removeAt(index);
   }
+
   Update(): void {
     if (this.Updateinletchallanfrom.invalid) {
       this.Updateinletchallanfrom.markAllAsTouched();
@@ -212,38 +212,80 @@ export class InletchallanviewComponent {
     });
   }
 
-  // Update() {
-  //   if (this.Updateinletchallanfrom.invalid) {
-  //     this.Updateinletchallanfrom.markAllAsTouched();
-  //     return;
-  //   }
-  //   const Challan_id = this.Updateinletchallanfrom.value.Challan_id;
-  //   const formData = this.Updateinletchallanfrom.value;
-  //   this._rest.UpdateChallan(Challan_id, formData).subscribe({
-  //     next: (res: any) => {
-  //       alert(res.message);
-  //       if (res.success) {
-  //         // Close modal
-  //         const modalElement = document.getElementById('exampleModal');
-  //         if (modalElement) {
-  //           const modal = bootstrap.Modal.getInstance(modalElement);
-  //           if (modal) {
-  //             modal.hide();
-  //           }
-  //         }
-  //         // Optional: reload challan list
-  //         this.ByChallanid();
-  //         console.log('Challan updated successfully');
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.error('Update failed:', error);
-  //     }
-  //   });
-  // }
+
+
   selectedchallanId = 0;
   adminPassword = '';
+  deletionReason = '';
+  isDeleting: boolean = false;
+
   openDeleteModal(id: number) {
     this.selectedchallanId = id;
   }
+
+  DeleteChallan() {
+    if (!this.adminPassword || this.adminPassword.trim() === '') {
+      alert('Please enter Admin Password');
+      return;
+    }
+
+    if (!this.deletionReason || this.deletionReason.trim() === '') {
+      alert('Please enter the reason for deletion');
+      return;
+    }
+
+    if (this.deletionReason.trim().length < 5) {
+      alert('Please enter a valid deletion reason');
+      return;
+    }
+    if (!this.selectedchallanId) {
+      alert('Invalid Challan');
+      return;
+    }
+    this.isDeleting = true;
+    this._rest.DeleteChallan(
+      this.selectedchallanId,
+      this.adminPassword,
+      this.deletionReason.trim()
+    )
+      .subscribe({
+        next: (res: any) => {
+          this.isDeleting = false;
+          alert(res.message);
+          if (res.success) {
+            // Refresh challan list
+            this.ByChallanid();
+            // Clear values
+            this.adminPassword = '';
+            this.deletionReason = '';
+            this.selectedchallanId = 0;
+            this.liked = false;
+            // Close modal
+            const modalElement =
+              document.getElementById('deleteVendorModal');
+
+            if (modalElement) {
+
+              const modal =
+                (window as any).bootstrap.Modal
+                  .getInstance(modalElement);
+              if (modal) {
+                modal.hide();
+              }
+            }
+          }
+        },
+
+        error: (err) => {
+          this.isDeleting = false;
+          console.log(err);
+          if (err.error && err.error.message) {
+            alert(err.error.message);
+          } else {
+            alert('Something went wrong while deleting challan');
+          }
+        }
+      });
+  }
+
 }

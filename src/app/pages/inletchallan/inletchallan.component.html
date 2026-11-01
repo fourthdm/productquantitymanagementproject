@@ -240,7 +240,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form [formGroup]="Updateinletchallanfrom">
+                    <form [formGroup]="Updateinletchallanfrom">
                     <br>
                     <div class="card">
                         <div class="card-body">
@@ -251,12 +251,7 @@
                                     <label for="Customer_Name">Customer Name</label>
                                     <br>
                                     <input class="form-control" formControlName="Customer_Name">
-                                    <!-- <select class="form-control" formControlName="Customer_Name">
-                                        
-                                        <option value="">-- Select Customer Name --</option>
-                                        <option *ngFor="let Cust of AllCustomerData" [value]="Cust.Customer_Name">
-                                            {{Cust.Customer_Name}}</option>
-                                    </select> <br> -->
+                                 
                                 </div>
 
                                 <div class="col-md-4">
@@ -288,58 +283,65 @@
                         <div class="card-body">
                             <h4><b>2. Products</b></h4>
                             <div formArrayName="items">
-
-                                <div *ngFor="let product of items.controls; let i=index" [formGroupName]="i"
+                                <div *ngFor="let product of items.controls; let i = index" [formGroupName]="i"
                                     class="border rounded p-3 mb-3">
 
                                     <div class="row">
-
-                                        <!-- Product Name -->
                                         <div class="col-md-3">
                                             <label>Product Name</label>
                                             <input class="form-control" formControlName="Product_Name">
                                         </div>
 
-                                        <!-- HSN -->
                                         <div class="col-md-2">
                                             <label>HSN Code</label>
                                             <input class="form-control" formControlName="HSN_Code">
                                         </div>
 
-                                        <!-- Qty -->
                                         <div class="col-md-2">
-                                            <label>Qty</label>
-                                            <input type="number" class="form-control" formControlName="Product_Quantity"
-                                                (input)="calculateSubtotal(i)">
+                                            <label>Ordered Qty</label>
+                                            <input type="number" min="0" class="form-control"
+                                                formControlName="Product_Quantity" (input)="calculateSubtotal(i)">
                                         </div>
 
-                                        <!-- Rate -->
                                         <div class="col-md-2">
                                             <label>Rate</label>
-                                            <input type="number" class="form-control" formControlName="Rate"
+                                            <input type="number" min="0" class="form-control" formControlName="Rate"
                                                 (input)="calculateSubtotal(i)">
                                         </div>
 
-                                        <!-- Subtotal -->
                                         <div class="col-md-2">
                                             <label>Subtotal</label>
                                             <input class="form-control" formControlName="SubTotal" readonly>
                                         </div>
-
-                                        <!-- Remove -->
-                                        <div class="col-md-1 d-flex align-items-end">
-
-                                            <button class="btn btn-danger" type="button" (click)="removeProduct(i)">
-
-                                                <i class="fa fa-trash"></i>
-
-                                            </button>
-
-                                        </div>
-
                                     </div>
 
+                                    <div class="row mt-3">
+                                        <div class="col-md-3">
+                                            <label>Produced Qty</label>
+                                            <input type="number" min="0" class="form-control"
+                                                formControlName="Produced_Quantity">
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label>Damaged Qty</label>
+                                            <input type="number" min="0" class="form-control"
+                                                formControlName="Damaged_Quantity">
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label>Faulty Qty</label>
+                                            <input type="number" min="0" class="form-control"
+                                                formControlName="Faulty_Quantity">
+                                        </div>
+
+                                        <div class="col-md-3 d-flex align-items-end">
+                                            <button class="btn btn-danger" type="button" (click)="removeProduct(i)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <button class="btn btn-success" type="button" (click)="addProduct()">
                                     Add New Product
                                 </button>
@@ -410,7 +412,8 @@
                                         <label class="form-check-label" for="inlinecheckbox2">
                                             <span><b>Hold</b></span>
                                         </label>
-                                        <i class="fa-solid fa-circle-pause fa-lg text-warning iconi"></i>
+                                        <i class="fa-solid fa-circle-pause fa-lg text-warning iconi"
+                                            style="padding-top: 10%;"></i>
                                     </div>
                                 </div>
 
@@ -463,7 +466,7 @@
                                             formControlName="Delivery_Status" />
                                         <label class="form-check-label" for="inlinecheckbox1">
                                             <span><b>In Transport</b></span> <br>
-                                            <span>Product has been on the way</span>
+                                            <span>Product has been onthe way</span>
                                         </label>
                                         <i class="fa-solid fa-truck-fast fa-xl text-warning iconi"></i>
                                     </div>
@@ -504,7 +507,7 @@
                         <div class="card-body">
                             <h4><b>6. Challan Status </b></h4>
                             <br>
-                            <div class="colmd">
+                            <div class="colmddelivery">
                                 <div class="formcheckbox">
                                     <div>
                                         <input class="form-check-input" type="radio" name="Challan_Status"
@@ -563,14 +566,11 @@
 
 <div class="modal fade" id="deleteVendorModal">
     <div class="modal-dialog">
-
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title">
                     Delete Challan
                 </h5>
-
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
@@ -582,13 +582,11 @@
                     <!-- This action cannot be undone. -->
                     Please enter the admin password and deletion reason.
                 </div>
-
                 <!-- Password -->
                 <div class="mb-3">
                     <label class="form-label">
                         Admin Password <span class="text-danger">*</span>
                     </label>
-
                     <div class="input-group">
                         <input [type]="liked ? 'text' : 'password'" class="form-control" [(ngModel)]="adminPassword"
                             placeholder="Enter Admin Password" autocomplete="off">
@@ -627,36 +625,5 @@
             </div>
         </div>
 
-        <!-- <div class="modal-content">
-
-            <div class="modal-header">
-                <h5>Delete Challan</h5>
-            </div>
-
-            <div class="modal-body">
-                <label>Enter Admin Password</label>
-                <div class="input-group ">
-                    <input [type]="liked ? 'password' : 'adminPassword'" type="Password" class="form-control"
-                        [(ngModel)]="adminPassword" placeholder="Enter Password" required>
-                    <span class="btn btn-outline-secondary" type="" [ngClass]="{
-                                                        'fa-eye-slash': !liked,
-                                                        'fa-eye': liked }" (click)="Show()" id="button-addon2"><i
-                            class="fa-solid fa-eye-slash"></i>
-                    </span>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">
-                    Cancel
-                </button>
-
-                <button class="btn btn-danger" (click)="DeleteChallan()">
-                    Delete
-                </button>
-
-            </div>
-
-        </div> -->
     </div>
 </div>

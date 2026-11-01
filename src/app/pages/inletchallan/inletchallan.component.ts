@@ -20,9 +20,10 @@ export class InletchallanComponent {
   @Input() Added_Date: any;
 
   AllCustomerData: any[] = [];
-  AllChallan: any[] = [];
 
+  AllChallan: any[] = [];
   Updateinletchallanfrom: FormGroup;
+
   pro: any;
 
   constructor(private _rest: RestService, private fb: FormBuilder, private _activatedroute: ActivatedRoute) {
@@ -86,52 +87,36 @@ export class InletchallanComponent {
   printPdf(Challan_id: any) {
     this._rest.GetChallanPDF(Challan_id).subscribe((file: Blob) => {
       const url = window.URL.createObjectURL(file);
-      window.open(url, '_blank')
+      window.open(url, '_blank');
     });
-    // this._rest.GetChallanPDF(Challan_id)
-    //   .subscribe((file: Blob) => {
-    //     const url = window.URL.createObjectURL(file);
-    //     const win = window.open('', '_blank');
-
-    //     if (win) {
-    //       win.document.write(
-    //         `<iframe src="${url}" style="width:100%;height:100%;border:none;"></iframe>`
-    //       );
-
-    //       setTimeout(() => {
-    //         win.print();
-    //       }, 800);
-
-    //       URL.revokeObjectURL(url);
-    //     }
-    //   });
   }
 
-  addProduct() {
-    this.items.push(
-      this.createProduct()
-    );
+  addProduct(): void {
+    this.items.push(this.createProduct());
   }
 
-  createProduct(): FormGroup {
+  createProduct(product?: any): FormGroup {
+    const quantity = Number(product?.Product_Quantity ?? product?.Ordered_Quantity ?? 1);
+    const rate = Number(product?.Rate ?? 0);
+
     return this.fb.group({
-      // InletProduct_id: [],
-      Product_Name: ['', Validators.required],
-      HSN_Code: [''],
-      Product_Quantity: [1, Validators.required],
-      Rate: [0, Validators.required],
-      SubTotal: [{ value: 0, disabled: true }]
+      // Keep this ID for existing rows. Leave null for a new product.
+      InletProduct_id: [product?.InletProduct_id ?? null],
+      Product_Name: [product?.Product_Name ?? '', Validators.required],
+      HSN_Code: [product?.HSN_Code ?? ''],
+      Product_Quantity: [quantity, [Validators.required, Validators.min(0)]],
+      Rate: [rate, [Validators.required, Validators.min(0)]],
+      SubTotal: [{ value: quantity * rate, disabled: true }],
+      Produced_Quantity: [Number(product?.Produced_Quantity ?? 0), [Validators.min(0)]],
+      Damaged_Quantity: [Number(product?.Damaged_Quantity ?? 0), [Validators.min(0)]],
+      Faulty_Quantity: [Number(product?.Faulty_Quantity ?? 0), [Validators.min(0)]]
     });
   }
 
   calculateSubtotal(index: number) {
     const product = this.items.at(index);
-
-    const qty =
-      Number(product.get('Product_Quantity')?.value) || 0;
-
-    const rate =
-      Number(product.get('Rate')?.value) || 0;
+    const qty = Number(product.get('Product_Quantity')?.value) || 0;
+    const rate = Number(product.get('Rate')?.value) || 0;
     const subtotal = qty * rate;
     product.get('SubTotal')?.setValue(subtotal);
   }
@@ -142,12 +127,54 @@ export class InletchallanComponent {
 
   Selectedchallan: any = null;
 
+  // editRequirement(Challan_id: any) {
+
+  //   const data = this.AllChallan.find(r => r.Challan_id === Challan_id);
+
+  //   if (!data) return;
+
+  //   this.Selectedchallan = 1;
+
+  //   this.Updateinletchallanfrom.patchValue({
+  //     Challan_id: data.Challan_id,
+  //     Customer_Name: data.Customer_Name,
+  //     Company_Name: data.Company_Name,
+  //     Company_Address: data.Company_Address,
+  //     GST_No: data.GST_No,
+  //     Discount_Amount: data.Discount_Amount,
+  //     Delivery_Address: data.Delivery_Address,
+  //     Mode_of_Transport: data.Mode_of_Transport,
+  //     Transporter_Name: data.Transporter_Name,
+  //     Vehicle_Number: data.Vehicle_Number,
+  //     Remark: data.Remark,
+  //     Work_Status: data.Work_Status,
+  //     Delivery_Status: data.Delivery_Status,
+  //     Challan_Status: data.Challan_Status
+  //   });
+
+  //   // ✅ CLEAR OLD ITEMS
+  //   this.items.clear();
+  //   data.items.forEach((p: any) => {
+  //     this.items.push(
+  //       this.fb.group({
+  //         InletProduct_id: [p.InletProduct_id],
+  //         Product_Name: [p.Product_Name],
+  //         HSN_Code: [p.HSN_Code],
+  //         Product_Quantity: [p.Product_Quantity],
+  //         Rate: [p.Rate],
+  //         SubTotal: [{
+  //           value: p.Product_Quantity * p.Rate,
+  //           disabled: true
+  //         }]
+  //       })
+  //     );
+  //   });
+  // }
+
+
   editRequirement(Challan_id: any) {
-
     const data = this.AllChallan.find(r => r.Challan_id === Challan_id);
-
     if (!data) return;
-
     this.Selectedchallan = 1;
 
     this.Updateinletchallanfrom.patchValue({
@@ -166,23 +193,10 @@ export class InletchallanComponent {
       Delivery_Status: data.Delivery_Status,
       Challan_Status: data.Challan_Status
     });
-
     // ✅ CLEAR OLD ITEMS
     this.items.clear();
-    data.items.forEach((p: any) => {
-      this.items.push(
-        this.fb.group({
-          InletProduct_id: [p.InletProduct_id],
-          Product_Name: [p.Product_Name],
-          HSN_Code: [p.HSN_Code],
-          Product_Quantity: [p.Product_Quantity],
-          Rate: [p.Rate],
-          SubTotal: [{
-            value: p.Product_Quantity * p.Rate,
-            disabled: true
-          }]
-        })
-      );
+    (data.items ?? []).forEach((p: any) => {
+      this.items.push(this.createProduct(p));
     });
   }
 
@@ -190,58 +204,58 @@ export class InletchallanComponent {
     this.items.removeAt(index);
   }
 
-  Update() {
-
+  Update(): void {
     if (this.Updateinletchallanfrom.invalid) {
       this.Updateinletchallanfrom.markAllAsTouched();
       return;
     }
-
-    const Challan_id = this.Updateinletchallanfrom.value.Challan_id;
-    const formData = this.Updateinletchallanfrom.value;
-
-    this._rest.UpdateChallan(Challan_id, formData).subscribe({
+    const formData = this.Updateinletchallanfrom.getRawValue();
+    const challanId = formData.Challan_id;
+    this._rest.UpdateChallan(challanId, formData).subscribe({
       next: (res: any) => {
         alert(res.message);
-
-        this.AllchallanDetails();
         if (res.success) {
-          // Close modal
           const modalElement = document.getElementById('exampleModal');
-
           if (modalElement) {
-            const modal = bootstrap.Modal.getInstance(modalElement);
-
-            if (modal) {
-              modal.hide();
-            }
+            bootstrap.Modal.getInstance(modalElement)?.hide();
           }
-
-          console.log('Challan updated successfully');
+          this.AllchallanDetails();
         }
-
       },
       error: (error) => {
         console.error('Update failed:', error);
+        alert(error.error?.message || 'Challan update failed.');
       }
     });
   }
 
   // Update() {
+  //   if (this.Updateinletchallanfrom.invalid) {
+  //     this.Updateinletchallanfrom.markAllAsTouched();
+  //     return;
+  //   }
   //   const Challan_id = this.Updateinletchallanfrom.value.Challan_id;
-  //   this._rest.UpdateChallan(Challan_id, this.Updateinletchallanfrom.value).subscribe({
+  //   const formData = this.Updateinletchallanfrom.value;
+  //   this._rest.UpdateChallan(Challan_id, formData).subscribe({
   //     next: (res: any) => {
   //       alert(res.message);
+  //       this.AllchallanDetails();
+  //       if (res.success) {
+  //         const modalElement = document.getElementById('exampleModal');
+  //         if (modalElement) {
+  //           const modal = bootstrap.Modal.getInstance(modalElement);
+  //           if (modal) {
+  //             modal.hide();
+  //           }
+  //         }
+  //         console.log('Challan updated successfully');
+  //       }
   //     },
-  //     error: (err) => {
-  //       console.log(err);
+  //     error: (error) => {
+  //       console.error('Update failed:', error);
   //     }
   //   });
   // }
-
-
-  // selectedchallanId = 0;
-  // adminPassword = '';
 
   selectedchallanId = 0;
   adminPassword = '';
@@ -252,42 +266,26 @@ export class InletchallanComponent {
     this.selectedchallanId = id;
   }
 
-
   DeleteChallan() {
-
     if (!this.adminPassword || this.adminPassword.trim() === '') {
-
       alert('Please enter Admin Password');
-
       return;
     }
-
 
     if (!this.deletionReason || this.deletionReason.trim() === '') {
-
       alert('Please enter the reason for deletion');
-
       return;
     }
-
 
     if (this.deletionReason.trim().length < 5) {
-
       alert('Please enter a valid deletion reason');
-
       return;
     }
-
-
     if (!this.selectedchallanId) {
-
       alert('Invalid Challan');
-
       return;
     }
-
     this.isDeleting = true;
-
     this._rest.DeleteChallan(
       this.selectedchallanId,
       this.adminPassword,
@@ -306,8 +304,6 @@ export class InletchallanComponent {
 
             // Refresh challan list
             this.AllchallanDetails();
-
-
             // Clear values
             this.adminPassword = '';
 
