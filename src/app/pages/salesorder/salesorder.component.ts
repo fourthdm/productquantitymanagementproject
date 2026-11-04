@@ -152,8 +152,6 @@ export class SalesorderComponent {
     this.items.push(this.createItem());
   }
 
-
-
   // submitSalesOrder(): void {
   //   if (this.AddSalesaOrderform.invalid) {
   //     this.AddSalesaOrderform.markAllAsTouched();
@@ -600,6 +598,4 @@ calculateGrandTotal(): void {
       }
     });
   }
-
-
 }

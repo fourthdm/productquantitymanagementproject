@@ -19,6 +19,7 @@ import { DeleteddataComponent } from './pages/deleteddata/deleteddata.component'
 import { VendorchallandeletedComponent } from './deletedhistory/vendorchallandeleted/vendorchallandeleted.component';
 import { InletchallandeletedComponent } from './deletedhistory/inletchallandeleted/inletchallandeleted.component';
 import { SalesorderlistComponent } from './pages/salesorderlist/salesorderlist.component';
+import { ProductdetailsComponent } from './pages/productdetails/productdetails.component';
 
 const routes: Routes = [
     { path: ' ', redirectTo: 'login', pathMatch: "full" },
@@ -31,7 +32,7 @@ const routes: Routes = [
       { path: 'Customer', component: CustomerComponent },
       { path: 'Vendor', component: VendorComponent },
       { path: 'Challan', component: ChallansComponent },
-      // { path: 'CreateChallan', component:ChallaninletComponent },
+      { path: 'ProductDetails', component:ProductdetailsComponent },
       { path: 'Salesorder', component: SalesorderComponent },
       { path: 'SalesOrderList', component: SalesorderlistComponent },
       { path: 'SalesorderData/:SalesOrder_id', component: SalesorderviewComponent },

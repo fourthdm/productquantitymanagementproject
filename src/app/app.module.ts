@@ -27,6 +27,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SalesorderlistComponent } from './pages/salesorderlist/salesorderlist.component';
+import { ProductdetailsComponent } from './pages/productdetails/productdetails.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { SalesorderlistComponent } from './pages/salesorderlist/salesorderlist.c
     OutwardchallanviewComponent,
     SalesorderviewComponent,
     ChallanbysaleordernumberComponent,
-    SalesorderlistComponent
+    SalesorderlistComponent,
+    ProductdetailsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StateService } from './state.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -416,6 +416,42 @@ export class RestService {
       }
     );
   }
+
+  ExtraProduct() {
+    return this._http.get(this.ApiUrl + `/Allproduct_excess_stock`);
+  }
+
+
+  // GetProductExtraStock(
+  //   Product_Name: string,
+  //   HSN_Code: string
+  // ) {
+  //   return this._http.get<any>(
+  //     `${this.ApiUrl}/GetProductExtraStock`,
+  //     {params: { Product_Name, HSN_Code: HSN_Code || '' }}
+  //   );
+  // }
+
+GetProductExtraStock(Product_Name: string, HSN_Code: string) {
+  const params = new HttpParams()
+    .set('Product_Name', Product_Name)
+    .set('HSN_Code', HSN_Code || '');
+
+  return this._http.get<any>(
+    `${this.ApiUrl}/GetProductExtraStock`,
+    { params }
+  );
+}
+
+UpdateInletProductProduction(
+  InletProduct_id: number,
+  payload: any
+) {
+  return this._http.put<any>(
+    `${this.ApiUrl}/UpdateInletProductProduction/${InletProduct_id}`,
+    payload
+  );
+}
 
 }
 

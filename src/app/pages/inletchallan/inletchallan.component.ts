@@ -96,20 +96,29 @@ export class InletchallanComponent {
   }
 
   createProduct(product?: any): FormGroup {
-    const quantity = Number(product?.Product_Quantity ?? product?.Ordered_Quantity ?? 1);
+    const quantity = Number(
+      product?.Product_Quantity ?? product?.Ordered_Quantity ?? 1
+    );
     const rate = Number(product?.Rate ?? 0);
 
     return this.fb.group({
-      // Keep this ID for existing rows. Leave null for a new product.
       InletProduct_id: [product?.InletProduct_id ?? null],
+      Product_id: [product?.Product_id ?? null],
       Product_Name: [product?.Product_Name ?? '', Validators.required],
       HSN_Code: [product?.HSN_Code ?? ''],
-      Product_Quantity: [quantity, [Validators.required, Validators.min(0)]],
-      Rate: [rate, [Validators.required, Validators.min(0)]],
-      SubTotal: [{ value: quantity * rate, disabled: true }],
-      Produced_Quantity: [Number(product?.Produced_Quantity ?? 0), [Validators.min(0)]],
-      Damaged_Quantity: [Number(product?.Damaged_Quantity ?? 0), [Validators.min(0)]],
-      Faulty_Quantity: [Number(product?.Faulty_Quantity ?? 0), [Validators.min(0)]]
+      Product_Quantity: [quantity,[Validators.required, Validators.min(1)] ],
+      Ordered_Quantity: [Number(product?.Ordered_Quantity ?? quantity),[Validators.required, Validators.min(1)]],
+      Available_Extra_Stock: [Number(product?.Available_Extra_Stock ?? 0)],
+      Stock_Used: [Number(product?.Stock_Used ?? 0)],
+      Manufacturing_Required: [ Number(product?.Manufacturing_Required ?? quantity)],
+      Produced_Quantity: [Number(product?.Produced_Quantity ?? 0),[Validators.min(0)]],
+      Damaged_Quantity: [Number(product?.Damaged_Quantity ?? 0),[Validators.min(0)]],
+      Faulty_Quantity: [Number(product?.Faulty_Quantity ?? 0), [Validators.min(0)]],
+      Good_Quantity: [Number(product?.Good_Quantity ?? 0)],
+      Extra_Quantity: [Number(product?.Extra_Quantity ?? 0)],
+      ExtraStock_Posted_Quantity: [Number(product?.ExtraStock_Posted_Quantity ?? 0) ],
+      Rate: [  rate,[Validators.required, Validators.min(0)]  ],
+      SubTotal: [{ value: quantity * rate, disabled: true }]
     });
   }
 
@@ -126,51 +135,7 @@ export class InletchallanComponent {
   }
 
   Selectedchallan: any = null;
-
-  // editRequirement(Challan_id: any) {
-
-  //   const data = this.AllChallan.find(r => r.Challan_id === Challan_id);
-
-  //   if (!data) return;
-
-  //   this.Selectedchallan = 1;
-
-  //   this.Updateinletchallanfrom.patchValue({
-  //     Challan_id: data.Challan_id,
-  //     Customer_Name: data.Customer_Name,
-  //     Company_Name: data.Company_Name,
-  //     Company_Address: data.Company_Address,
-  //     GST_No: data.GST_No,
-  //     Discount_Amount: data.Discount_Amount,
-  //     Delivery_Address: data.Delivery_Address,
-  //     Mode_of_Transport: data.Mode_of_Transport,
-  //     Transporter_Name: data.Transporter_Name,
-  //     Vehicle_Number: data.Vehicle_Number,
-  //     Remark: data.Remark,
-  //     Work_Status: data.Work_Status,
-  //     Delivery_Status: data.Delivery_Status,
-  //     Challan_Status: data.Challan_Status
-  //   });
-
-  //   // ✅ CLEAR OLD ITEMS
-  //   this.items.clear();
-  //   data.items.forEach((p: any) => {
-  //     this.items.push(
-  //       this.fb.group({
-  //         InletProduct_id: [p.InletProduct_id],
-  //         Product_Name: [p.Product_Name],
-  //         HSN_Code: [p.HSN_Code],
-  //         Product_Quantity: [p.Product_Quantity],
-  //         Rate: [p.Rate],
-  //         SubTotal: [{
-  //           value: p.Product_Quantity * p.Rate,
-  //           disabled: true
-  //         }]
-  //       })
-  //     );
-  //   });
-  // }
-
+  
 
   editRequirement(Challan_id: any) {
     const data = this.AllChallan.find(r => r.Challan_id === Challan_id);
@@ -229,33 +194,6 @@ export class InletchallanComponent {
     });
   }
 
-  // Update() {
-  //   if (this.Updateinletchallanfrom.invalid) {
-  //     this.Updateinletchallanfrom.markAllAsTouched();
-  //     return;
-  //   }
-  //   const Challan_id = this.Updateinletchallanfrom.value.Challan_id;
-  //   const formData = this.Updateinletchallanfrom.value;
-  //   this._rest.UpdateChallan(Challan_id, formData).subscribe({
-  //     next: (res: any) => {
-  //       alert(res.message);
-  //       this.AllchallanDetails();
-  //       if (res.success) {
-  //         const modalElement = document.getElementById('exampleModal');
-  //         if (modalElement) {
-  //           const modal = bootstrap.Modal.getInstance(modalElement);
-  //           if (modal) {
-  //             modal.hide();
-  //           }
-  //         }
-  //         console.log('Challan updated successfully');
-  //       }
-  //     },
-  //     error: (error) => {
-  //       console.error('Update failed:', error);
-  //     }
-  //   });
-  // }
 
   selectedchallanId = 0;
   adminPassword = '';
@@ -341,24 +279,6 @@ export class InletchallanComponent {
         }
       });
   }
-
-  // DeleteChallan() {
-  //   this._rest.DeleteChallan(
-  //     this.selectedchallanId,
-  //     this.adminPassword
-  //   ).subscribe({
-  //     next: (res: any) => {
-  //       alert(res.message);
-  //       if (res.success) {
-  //         this.AllchallanDetails();
-  //         this.adminPassword = '';
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  //     }
-  //   });
-  // }
 
   DatabyDate() {
     this._rest.challanDatabyDate({ Added_Date: this.Added_Date }).subscribe((data: any) => {

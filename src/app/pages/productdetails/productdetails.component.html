@@ -1,0 +1,44 @@
+<div class="container">
+    <br><br><br><br>
+    <h2><b>Extra Products </b></h2>
+    <br>
+
+    <div class="row">
+        <div class="card externalcard">
+            <div class="card-body">
+
+                <div class="row" *ngIf="Extraproduct.length == 0">
+                    <div class="text-center">
+                        <h2>Inlet Challan Data Not Found</h2>
+                        <p>Please remove your filters to view all Inlet Challan.</p> <br>
+                        <button class="btn btn-success" (click)="ExtraProduct()">All Challan Data</button>
+                    </div>
+                </div>
+
+                <div class="row" *ngIf="Extraproduct.length > 0">
+                    <div class="col-md-4" *ngFor="let Ch of Extraproduct | paginate:{itemsPerPage :6 ,currentPage:pro}">
+                        <div class="card carddata">
+                            <div class="card-body">
+                                <p>
+                                    <b>Product Name :</b> {{Ch.Product_Name}} <br>
+                                    <b>HSN Code :</b> {{Ch.HSN_Code}} <br>
+                                    <b>Available Quantity :</b> {{Ch.Available_Quantity}} <br>
+                                    <b>Updated Date :</b> {{Ch.Updated_Date | date}} <br>
+                                </p>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+
+                    <br>
+                    <div class="text-center">
+                        <br><pagination-controls (pageChange)=" pro = $event "
+                            style="background-color: #252847 !important; z-index: -2 !important;"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div> 
+<br>

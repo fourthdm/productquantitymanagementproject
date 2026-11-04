@@ -9,7 +9,7 @@ import { RestService } from 'src/app/services/rest.service';
   styleUrls: ['./challans.component.css']
 })
 export class ChallansComponent implements OnInit {
-  
+
   AllSaleorders: any[] = [];
   Addinletchallanform!: FormGroup;
   submitted = false;
@@ -78,26 +78,57 @@ export class ChallansComponent implements OnInit {
       items: this.fb.array([])
     });
   }
-
   createProduct(item?: any): FormGroup {
     return this.fb.group({
       Product_id: [item?.Product_id ?? null],
-      SalesOrderItem_id: [item?.SalesOrderItem_id ?? null],
-      Product_Name: [item?.Product_Name ?? '', Validators.required],
-      HSN_Code: [item?.HSN_Code ?? ''],
+
+      SalesOrderItem_id: [
+        item?.SalesOrderItem_id ?? null
+      ],
+
+      Product_Name: [
+        item?.Product_Name ?? '',
+        Validators.required
+      ],
+
+      HSN_Code: [
+        item?.HSN_Code ?? ''
+      ],
+
       Product_Quantity: [
         item?.Ordered_Quantity ?? item?.Product_Quantity ?? 1,
         [Validators.required, Validators.min(1)]
       ],
+
       Ordered_Quantity: [
         item?.Ordered_Quantity ?? item?.Product_Quantity ?? 0,
-        [Validators.required, Validators.min(0)]
+        [Validators.required, Validators.min(1)]
       ],
-      Produced_Quantity: [0, [Validators.min(0)]],
-      Damaged_Quantity: [0, [Validators.min(0)]],
-      Faulty_Quantity: [0, [Validators.min(0)]],
+
+      // Stock fields
+      Available_Extra_Stock: [0],
+      Stock_Used: [0],
+      Manufacturing_Required: [0],
+
+      Produced_Quantity: [
+        0,
+        Validators.min(0)
+      ],
+
+      Damaged_Quantity: [
+        0,
+        Validators.min(0)
+      ],
+
+      Faulty_Quantity: [
+        0,
+        Validators.min(0)
+      ],
+
       Good_Quantity: [0],
       Extra_Quantity: [0],
+      ExtraStock_Posted_Quantity: [0],
+
       Rate: [
         item?.Rate ?? 0,
         [Validators.required, Validators.min(0)]
@@ -155,29 +186,43 @@ export class ChallansComponent implements OnInit {
       Discount_Amount: Number(order.Discount_Amount) || 0
     });
 
-    const products = Array.isArray(order.items) ? order.items : [];
+    const products = Array.isArray(order.items)
+      ? order.items
+      : [];
 
-    if (products.length === 0) {
-      console.warn('No products found for Sales Order:', salesOrderNumber);
-      this.calculateGrandTotal();
-      return;
-    }
+    products.forEach((item: any) => {
 
-    products.forEach((product: any) => {
-      const productId =
-        product.Product_id ?? product.product_id ?? null;
+      const productForm = this.createProduct(item);
 
-      const salesOrderItemId =
-        product.SalesOrderItem_id ?? product.Sales_Order_Item_id ?? null;
+      this.items.push(productForm);
 
-      this.items.push(
-        this.createProduct({
-          ...product,
-          Product_id: productId,
-          SalesOrderItem_id: salesOrderItemId
-        })
-      );
+      // Fetch available extra stock for every product.
+      this.LoadExtraStock(productForm);
+
     });
+
+    this.calculateGrandTotal();
+
+    // products.forEach((product: any) => {
+    //   const productId =
+    //     product.Product_id ?? product.product_id ?? null;
+
+    //   const salesOrderItemId =
+    //     product.SalesOrderItem_id ??
+    //     product.Sales_Order_Item_id ??
+    //     null;
+
+    //   const productForm = this.createProduct({
+    //     ...product,
+    //     Product_id: productId,
+    //     SalesOrderItem_id: salesOrderItemId
+    //   });
+
+    //   this.items.push(productForm);
+
+    //   this.LoadExtraStock(productForm);
+    // });
+
 
     console.table(
       this.items.getRawValue().map((product: any) => ({
@@ -190,56 +235,86 @@ export class ChallansComponent implements OnInit {
     this.calculateGrandTotal();
   }
 
-  // autoFillBySalesOrder(salesOrderNumber: string): void {
-  //   // Step 1: Always clear previously loaded products
-  //   this.items.clear();
+  LoadExtraStock(productForm: FormGroup): void {
 
-  //   if (!salesOrderNumber) {
-  //     this.Addinletchallanform.patchValue({
-  //       Customer_Name: '',
-  //       Company_Name: '',
-  //       Company_Address: '',
-  //       GST_No: '',
-  //       Delivery_Address: '',
-  //       Discount_Amount: 0
-  //     });
+    const productName = String(
+      productForm.get('Product_Name')?.value || ''
+    ).trim();
 
-  //     this.calculateGrandTotal();
-  //     return;
-  //   }
+    const hsnCode = String(
+      productForm.get('HSN_Code')?.value || ''
+    ).trim();
 
-  //   // Step 2: Find the selected sales order
-  //   const order = this.AllSaleorders.find(
-  //     (item: any) =>
-  //       String(item.Sales_Order_Number) === String(salesOrderNumber)
-  //   );
+    if (!productName) {
+      return;
+    }
 
-  //   if (!order) {
-  //     console.error('Sales order not found:', salesOrderNumber);
-  //     return;
-  //   }
+    this._rest.GetProductExtraStock(
+      productName,
+      hsnCode
+    ).subscribe({
+      next: (res: any) => {
 
-  //   // Step 3: Fill customer details
-  //   this.Addinletchallanform.patchValue({
-  //     Customer_Name: order.Customer_Name ?? '',
-  //     Company_Name: order.Company_Name ?? '',
-  //     Company_Address: order.Company_Address ?? '',
-  //     GST_No: order.GST_No ?? '',
-  //     Delivery_Address: order.Delivery_Address ?? '',
-  //     Discount_Amount: Number(order.Discount_Amount) || 0
-  //   });
+        const available = Number(
+          res.Available_Quantity
+        ) || 0;
 
-  //   // Step 4: Add products only once
-  //   const products = Array.isArray(order.items) ? order.items : [];
+        productForm.patchValue({
+          Available_Extra_Stock: available
+        }, { emitEvent: false });
 
-  //   products.forEach((product: any) => {
-  //     this.items.push(this.createProduct(product));
-  //   });
+        const index = this.items.controls.indexOf(productForm);
 
-  //   // Step 5: Recalculate totals
-  //   this.calculateGrandTotal();
-  //   console.log('Loaded products:', this.items.value);
-  // }
+        if (index !== -1) {
+          this.CalculateStock(index);
+        }
+      },
+
+      error: (err: any) => {
+        console.error('Stock fetch error:', err);
+
+        productForm.patchValue({
+          Available_Extra_Stock: 0
+        }, { emitEvent: false });
+
+        const index = this.items.controls.indexOf(productForm);
+
+        if (index !== -1) {
+          this.CalculateStock(index);
+        }
+      }
+    });
+  }
+
+  CalculateStock(index: number): void {
+
+    const product = this.items.at(index) as FormGroup;
+
+    const ordered = Number(
+      product.get('Ordered_Quantity')?.value
+    ) || 0;
+
+    const available = Number(
+      product.get('Available_Extra_Stock')?.value
+    ) || 0;
+
+    const stockUsed = Math.min(
+      ordered,
+      available
+    );
+
+    const manufacturingRequired = Math.max(
+      0,
+      ordered - stockUsed
+    );
+
+    product.patchValue({
+      Stock_Used: stockUsed,
+      Manufacturing_Required: manufacturingRequired
+    }, { emitEvent: false });
+
+    this.CalculateProduction(index);
+  }
 
   GetItemTotal(index: number): number {
     const item = this.items.at(index);
@@ -309,54 +384,29 @@ export class ChallansComponent implements OnInit {
 
     this.calculateGrandTotal();
 
-    const formData = this.Addinletchallanform.getRawValue();
+   const formValue = this.Addinletchallanform.getRawValue();
 
-    const payload = {
-      ...formData,
-      Sub_Total: this.GetSubTotal(),
-      Total_Amount: this.GetTotalAmount(),
-      Discount_Amount: Number(formData.Discount_Amount) || 0,
-      CGST_amount: this.GetCGST(),
-      SGST_amount: this.GetSGST(),
-      Grand_Total: this.GetGrandTotal(),
+const payload = {
+  ...formValue,
 
-      // items: formData.items.map((item: any) => ({
-      //   Product_id: item.Product_id || null,
-      //   SalesOrderItem_id: item.SalesOrderItem_id || null,
-      //   Product_Name: item.Product_Name,
-      //   HSN_Code: item.HSN_Code || '',
-      //   Product_Quantity: Number(item.Product_Quantity) || 0,
-      //   Ordered_Quantity: Number(item.Ordered_Quantity) || 0,
-      //   Produced_Quantity: Number(item.Produced_Quantity) || 0,
-      //   Damaged_Quantity: Number(item.Damaged_Quantity) || 0,
-      //   Faulty_Quantity: Number(item.Faulty_Quantity) || 0,
-      //   Good_Quantity: Number(item.Good_Quantity) || 0,
-      //   Extra_Quantity: Number(item.Extra_Quantity) || 0,
-      //   Rate: Number(item.Rate) || 0
-      // }))
+  items: formValue.items.map((item: any) => ({
+  Product_id: item.Product_id,
+  SalesOrderItem_id: item.SalesOrderItem_id,
+  Product_Name: item.Product_Name,
+  HSN_Code: item.HSN_Code,
 
-      items: formData.items.map((item: any) => ({
-        Product_id: item.Product_id ?? null,
-        SalesOrderItem_id: item.SalesOrderItem_id ?? null,
-        Product_Name: item.Product_Name,
-        HSN_Code: item.HSN_Code || '',
-        Product_Quantity: Number(item.Product_Quantity) || 0,
-        Ordered_Quantity: Number(item.Ordered_Quantity) || 0,
-        Produced_Quantity: Number(item.Produced_Quantity) || 0,
-        Damaged_Quantity: Number(item.Damaged_Quantity) || 0,
-        Faulty_Quantity: Number(item.Faulty_Quantity) || 0,
-        Good_Quantity: Number(item.Good_Quantity) || 0,
-        Extra_Quantity: Number(item.Extra_Quantity) || 0,
-        Rate: Number(item.Rate) || 0
-      }))
-      // items: formData.items.map((item: any) => ({
-      //   SalesOrderItem_id: item.SalesOrderItem_id,
-      //   Product_Name: item.Product_Name,
-      //   HSN_Code: item.HSN_Code,
-      //   Product_Quantity: Number(item.Product_Quantity),
-      //   Rate: Number(item.Rate)
-      // }))
-    };
+  Product_Quantity: Number(item.Product_Quantity),
+  Ordered_Quantity: Number(item.Ordered_Quantity),
+  Rate: Number(item.Rate),
+
+  // Preview only. The backend recalculates actual stock.
+  Available_Extra_Stock: Number(item.Available_Extra_Stock),
+  Stock_Used: Number(item.Stock_Used),
+  Manufacturing_Required: Number(item.Manufacturing_Required)
+}))
+
+};
+
     console.table(
       this.Addinletchallanform.value.items.map((item: any) => ({
         Product_Name: item.Product_Name,
@@ -403,32 +453,74 @@ export class ChallansComponent implements OnInit {
   }
 
   CalculateProduction(index: number): void {
-    const item = this.items.at(index);
-    // const product = this.items[index];
-
-    const ordered = Number(
-      item.get('Ordered_Quantity')?.value
-    ) || 0;
+    const product = this.items.at(index) as FormGroup;
 
     const produced = Number(
-      item.get('Produced_Quantity')?.value
+      product.get('Produced_Quantity')?.value
     ) || 0;
 
     const damaged = Number(
-      item.get('Damaged_Quantity')?.value
+      product.get('Damaged_Quantity')?.value
     ) || 0;
 
     const faulty = Number(
-      item.get('Faulty_Quantity')?.value
+      product.get('Faulty_Quantity')?.value
     ) || 0;
 
-    const good = Math.max(produced - damaged - faulty, 0);
-    const extra = Math.max(good - ordered, 0);
+    const manufacturingRequired = Number(
+      product.get('Manufacturing_Required')?.value
+    ) || 0;
 
-    item.patchValue({
+    const good = Math.max(
+      0,
+      produced - damaged - faulty
+    );
+
+    const extra = Math.max(
+      0,
+      good - manufacturingRequired
+    );
+
+    product.patchValue({
       Good_Quantity: good,
       Extra_Quantity: extra
     }, { emitEvent: false });
   }
+
+  SaveProduction(product: any): void {
+
+  const payload = {
+    Produced_Quantity: Number(product.Produced_Quantity) || 0,
+    Damaged_Quantity: Number(product.Damaged_Quantity) || 0,
+    Faulty_Quantity: Number(product.Faulty_Quantity) || 0
+  };
+
+  this._rest.UpdateInletProductProduction(
+    product.InletProduct_id,
+    payload
+  ).subscribe({
+    next: (res: any) => {
+
+      if (res.success) {
+
+        alert(
+          `Production updated successfully.\n` +
+          `Good Quantity: ${res.Good_Quantity}\n` +
+          `Extra Quantity: ${res.Extra_Quantity}\n` +
+          `Added to Stock: ${res.Added_To_Stock}`
+        );
+
+        // Refresh the inlet product / production list here.
+      }
+    },
+
+    error: (err: any) => {
+      alert(
+        err.error?.message ||
+        'Production update failed'
+      );
+    }
+  });
+}
 
 }
