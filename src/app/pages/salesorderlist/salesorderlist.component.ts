@@ -61,9 +61,11 @@ export class SalesorderlistComponent {
       ])
     })
   }
+
   ngOnInit(): void {
     this.AllSalesOrderDetails();
   }
+
   AllSalesOrderDetails() {
     this._rest.AllSalesOrders().subscribe((data: any) => {
       console.log(data);
@@ -84,6 +86,7 @@ export class SalesorderlistComponent {
   openDeleteModal(id: number) {
     this.selectedSalesorderId = id;
   }
+
   DeleteSalesorder() {
     if (!this.adminPassword || this.adminPassword.trim() === '') {
       alert('Please enter Admin Password');
@@ -112,14 +115,11 @@ export class SalesorderlistComponent {
           this.isDeleting = false;
           alert(res.message);
           if (res.success) {
-            // Refresh challan list
             this.AllSalesOrderDetails();
-            // Clear values
             this.adminPassword = '';
             this.deletionReason = '';
             this.selectedSalesorderId = 0;
             this.liked = false;
-            // Close modal
             const modalElement = document.getElementById('deleteVendorModal');
             if (modalElement) {
               const modal = (window as any).bootstrap.Modal.getInstance(modalElement);
@@ -189,9 +189,6 @@ export class SalesorderlistComponent {
     }
     console.log('Selected Sales Order:', data);
     this.SelectedSaleorder = 1;
-    // ------------------------------------
-    // Patch Sales Order Main Details
-    // ------------------------------------
     this.UpdateSalesOrderform.patchValue({
       SalesOrder_id: data.SalesOrder_id,
       Customer_Name: data.Customer_Name,
@@ -209,14 +206,8 @@ export class SalesorderlistComponent {
       Sales_Order_Status: data.Sales_Order_Status || ''
     });
 
-    // ------------------------------------
-    // Clear Existing FormArray
-    // ------------------------------------
     this.itemsupdate.clear();
 
-    // ------------------------------------
-    // Get Products
-    // ------------------------------------
     const products =
       data.itemsupdate ||
       data.items ||
@@ -226,46 +217,19 @@ export class SalesorderlistComponent {
 
     console.log('Products to patch:', products);
 
-    // ------------------------------------
-    // Patch Products
-    // ------------------------------------
     products.forEach((s: any) => {
-
       const qty = Number(s.Ordered_Quantity) || 0;
       const rate = Number(s.Rate) || 0;
-
       this.itemsupdate.push(
         this.fb.group({
           SalesOrderItem_id: [s.SalesOrderItem_id || null],
-
-          Product_Name: [
-            s.Product_Name || '',
-            Validators.required
-          ],
-
-          HSN_Code: [
-            s.HSN_Code || ''
-          ],
-
-          Ordered_Quantity: [
-            qty,
-            Validators.required
-          ],
-
-          Rate: [
-            rate,
-            Validators.required
-          ],
-
-          SubTotal: [
-            {
-              value: qty * rate,
-              disabled: true
-            }
-          ]
+          Product_Name: [s.Product_Name || '', Validators.required],
+          HSN_Code: [s.HSN_Code || ''],
+          Ordered_Quantity: [qty, Validators.required],
+          Rate: [rate, Validators.required],
+          SubTotal: [{ value: qty * rate, disabled: true }]
         })
       );
-
     });
 
     console.log(
@@ -333,141 +297,166 @@ export class SalesorderlistComponent {
     });
   }
 
-  CreateInletChallan(SalesOrder_id: number): void {
-    if (!SalesOrder_id) {
-      alert('Sales Order ID is missing.');
-      return;
+  // CreateInletChallan(SalesOrder_id: number): void {
+  //   if (!SalesOrder_id) {
+  //     alert('Sales Order ID is missing.');
+  //     return;
+  //   }
+  //   this._rest.SalesOrderbyId(SalesOrder_id).subscribe({
+  //     next: (res: any) => {
+  //       if (!res?.success) {
+  //         alert(res?.message || 'Unable to retrieve Sales Order.');
+  //         return;
+  //       }
+  //       const order = Array.isArray(res.data) ? res.data[0] : res.data;
+  //       if (!order) {
+  //         alert('Sales Order not found.');
+  //         return;
+  //       }
+  //       const id = Number(order.SalesOrder_id ?? order.Sales_Order_id);
+
+  //       if (!id) {
+  //         alert('Sales Order ID is missing from the response.');
+  //         return;
+  //       }
+
+  //       // Your backend requires exactly "Confirm".
+  //       if (order.Sales_Order_Status !== 'Confirm') {
+  //         alert('Confirm the Sales Order before creating an Inlet Challan.');
+  //         return;
+  //       }
+
+  //       this.SelectedSalesOrder = { ...order, SalesOrder_id: id };
+
+  //       // The Sales Order API must include its salesorderitems.
+  //       if (!Array.isArray(order.items) || order.items.length === 0) {
+  //         console.error('Sales Order items missing:', order);
+  //         alert(
+  //           'Sales Order products were not returned. Update the Sales Order API to include its items.'
+  //         );
+  //         return;
+  //       }
+
+  //       this.FillInletChallanForm(order);
+  //       const modalElement = document.getElementById('createInletChallanModal');
+  //       const bootstrap = (window as any).bootstrap;
+  //       if (!modalElement || !bootstrap) {
+  //         alert('Unable to open the Inlet Challan modal.');
+  //         return;
+  //       }
+
+  //       bootstrap.Modal
+  //         .getOrCreateInstance(modalElement)
+  //         .show();
+  //     },
+  //     error: (err: any) => {
+  //       console.error('Sales Order API Error:', err);
+  //       alert(
+  //         err.error?.message || 'Unable to load Sales Order details.'
+  //       );
+  //     }
+  //   });
+  // }
+  
+  CreateInletChallan(SalesOrder_id: number) {
+
+  this._rest.SalesOrderbyId(SalesOrder_id).subscribe({
+
+    next: (res: any) => {
+
+      console.log('Complete Sales Order:', res.data);
+
+      if (!res.success || !res.data) {
+        alert('Sales order details not found');
+        return;
+      }
+
+      const order = res.data;
+
+      this.SelectedSalesOrder = order;
+
+      this.FillInletChallanForm(order);
+
+      const modalElement = document.getElementById(
+        'createInletChallanModal'
+      );
+
+      if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+      }
+    },
+
+    error: (err: any) => {
+      console.error(err);
+      alert('Unable to fetch sales order details');
     }
 
-    this._rest.SalesOrderbyId(SalesOrder_id).subscribe({
-      next: (res: any) => {
-        if (!res?.success) {
-          alert(res?.message || 'Unable to retrieve Sales Order.');
-          return;
-        }
-
-        const order = Array.isArray(res.data)
-          ? res.data[0]
-          : res.data;
-
-        if (!order) {
-          alert('Sales Order not found.');
-          return;
-        }
-
-        const id = Number(
-          order.SalesOrder_id ?? order.Sales_Order_id
-        );
-
-        if (!id) {
-          alert('Sales Order ID is missing from the response.');
-          return;
-        }
-
-        // Your backend requires exactly "Confirm".
-        if (order.Sales_Order_Status !== 'Confirm') {
-          alert('Confirm the Sales Order before creating an Inlet Challan.');
-          return;
-        }
-
-        this.SelectedSalesOrder = {
-          ...order,
-          SalesOrder_id: id
-        };
-
-        // The Sales Order API must include its salesorderitems.
-        if (!Array.isArray(order.items) || order.items.length === 0) {
-          console.error('Sales Order items missing:', order);
-          alert(
-            'Sales Order products were not returned. Update the Sales Order API to include its items.'
-          );
-          return;
-        }
-
-        this.FillInletChallanForm(order);
-
-        const modalElement = document.getElementById(
-          'createInletChallanModal'
-        );
-
-        const bootstrap = (window as any).bootstrap;
-
-        if (!modalElement || !bootstrap) {
-          alert('Unable to open the Inlet Challan modal.');
-          return;
-        }
-
-        bootstrap.Modal
-          .getOrCreateInstance(modalElement)
-          .show();
-      },
-      error: (err: any) => {
-        console.error('Sales Order API Error:', err);
-        alert(
-          err.error?.message || 'Unable to load Sales Order details.'
-        );
-      }
-    });
-  }
+  });
+}
   get items(): FormArray {
     return this.InletChallanForm.get(
       'items'
     ) as FormArray;
   }
 
-FillInletChallanForm(order: any): void {
-  this.items.clear();
+  FillInletChallanForm(order: any): void {
+    this.items.clear();
+    const products = Array.isArray(order.items) ? order.items : [];
+    this.InletChallanForm.patchValue({
+      Sales_Order_Number: order.Sales_Order_Number || '',
+      Customer_Name: order.Customer_Name || '',
+      Company_Name: order.Company_Name || '',
+      Company_Address: order.Company_Address || '',
+      GST_No: order.GST_No || '',
+      Delivery_Address: order.Delivery_Address || '',
+      Discount_Amount: Number(order.Discount_Amount) || 0,
+      Mode_of_Transport: order.Mode_of_Transport || '',
+      Transporter_Name: order.Transporter_Name || '',
+      Vehicle_Number: order.Vehicle_Number || '',
+      Remark: order.Remark || ''
+    });
+    products.forEach((item: any) => {
+      const orderedQty = Number(item.Ordered_Quantity) || 0;
+      const availableStock = Number(item.Available_Extra_Stock) || 0;
+      const rate = Number(item.Rate) || 0;
+      const stockUsed = Math.min(orderedQty, availableStock);
+      const manufacturingRequired = Math.max(
+        orderedQty - stockUsed,
+        0
+      );
 
-  const products = Array.isArray(order.items) ? order.items : [];
-
-  products.forEach((item: any) => {
-    const orderedQty = Number(item.Ordered_Quantity) || 0;
-    const availableStock = Number(item.Available_Extra_Stock) || 0;
-    const rate = Number(item.Rate) || 0;
-
-    const stockUsed = Math.min(orderedQty, availableStock);
-    const manufacturingRequired = Math.max(
-      orderedQty - stockUsed,
-      0
-    );
-
-    this.items.push(this.fb.group({
-      SalesOrderItem_id: [item.SalesOrderItem_id],
-      Product_Name: [item.Product_Name || ''],
-      HSN_Code: [item.HSN_Code || ''],
-
-      Product_Quantity: [orderedQty],
-      Ordered_Quantity: [{ value: orderedQty, disabled: true }],
-
-      Available_Extra_Stock: [{
-        value: availableStock,
-        disabled: true
-      }],
-
-      Stock_Used: [{
-        value: stockUsed,
-        disabled: true
-      }],
-
-      Manufacturing_Required: [{
-        value: manufacturingRequired,
-        disabled: true
-      }],
-
-      Produced_Quantity: [0],
-      Damaged_Quantity: [0],
-      Faulty_Quantity: [0],
-      Good_Quantity: [{ value: 0, disabled: true }],
-      Extra_Quantity: [{ value: 0, disabled: true }],
-
-      Rate: [rate],
-      SubTotal: [{
-        value: orderedQty * rate,
-        disabled: true
-      }]
-    }));
-  });
-}
+      this.items.push(this.fb.group({
+        SalesOrderItem_id: [item.SalesOrderItem_id],
+        Product_Name: [item.Product_Name || ''],
+        HSN_Code: [item.HSN_Code || ''],
+        Product_Quantity: [orderedQty],
+        Ordered_Quantity: [{ value: orderedQty, disabled: true }],
+        Available_Extra_Stock: [{
+          value: availableStock,
+          disabled: true
+        }],
+        Stock_Used: [{
+          value: stockUsed,
+          disabled: true
+        }],
+        Manufacturing_Required: [{
+          value: manufacturingRequired,
+          disabled: true
+        }],
+        Produced_Quantity: [0],
+        Damaged_Quantity: [0],
+        Faulty_Quantity: [0],
+        Good_Quantity: [{ value: 0, disabled: true }],
+        Extra_Quantity: [{ value: 0, disabled: true }],
+        Rate: [rate],
+        SubTotal: [{
+          value: orderedQty * rate,
+          disabled: true
+        }]
+      }));
+    });
+  }
 
   SubmitInletChallan(): void {
     if (this.InletChallanForm.invalid) {
@@ -482,7 +471,6 @@ FillInletChallanForm(order: any): void {
       alert('Sales Order ID is missing.');
       return;
     }
-
     const payload = {
       Mode_of_Transport: formValue.Mode_of_Transport || null,
       Transporter_Name: formValue.Transporter_Name || null,
@@ -501,16 +489,13 @@ FillInletChallanForm(order: any): void {
         alert(
           `Inlet Challan created successfully!\nChallan Code: ${res.Challan_Code}`
         );
-
         const modalElement = document.getElementById(
           'createInletChallanModal'
         );
-
         if (modalElement) {
           (window as any).bootstrap.Modal
             .getInstance(modalElement)?.hide();
         }
-
         this.AllSalesOrderDetails();
       },
       error: (err: any) => {
@@ -532,9 +517,7 @@ FillInletChallanForm(order: any): void {
     this.router.navigate(['/Home/InletchallanDataSaleOrder', encodedNumber]);
   }
 
-
   LoadExtraStock(productForm: FormGroup): void {
-
     const productName = String(
       productForm.get('Product_Name')?.value || ''
     ).trim();
@@ -552,7 +535,6 @@ FillInletChallanForm(order: any): void {
       hsnCode
     ).subscribe({
       next: (res: any) => {
-
         const available = Number(
           res.Available_Quantity
         ) || 0;
@@ -562,7 +544,6 @@ FillInletChallanForm(order: any): void {
         }, { emitEvent: false });
 
         const index = this.items.controls.indexOf(productForm);
-
         if (index !== -1) {
           this.CalculateStock(index);
         }
@@ -570,13 +551,10 @@ FillInletChallanForm(order: any): void {
 
       error: (err: any) => {
         console.error('Stock fetch error:', err);
-
         productForm.patchValue({
           Available_Extra_Stock: 0
         }, { emitEvent: false });
-
         const index = this.items.controls.indexOf(productForm);
-
         if (index !== -1) {
           this.CalculateStock(index);
         }
@@ -585,27 +563,11 @@ FillInletChallanForm(order: any): void {
   }
 
   CalculateStock(index: number): void {
-
     const product = this.items.at(index) as FormGroup;
-
-    const ordered = Number(
-      product.get('Ordered_Quantity')?.value
-    ) || 0;
-
-    const available = Number(
-      product.get('Available_Extra_Stock')?.value
-    ) || 0;
-
-    const stockUsed = Math.min(
-      ordered,
-      available
-    );
-
-    const manufacturingRequired = Math.max(
-      0,
-      ordered - stockUsed
-    );
-
+    const ordered = Number(product.get('Ordered_Quantity')?.value) || 0;
+    const available = Number(product.get('Available_Extra_Stock')?.value) || 0;
+    const stockUsed = Math.min(ordered, available);
+    const manufacturingRequired = Math.max(0, ordered - stockUsed);
     product.patchValue({
       Stock_Used: stockUsed,
       Manufacturing_Required: manufacturingRequired
@@ -616,10 +578,8 @@ FillInletChallanForm(order: any): void {
 
   GetItemTotal(index: number): number {
     const item = this.items.at(index);
-
     const quantity = Number(item.get('Product_Quantity')?.value) || 0;
     const rate = Number(item.get('Rate')?.value) || 0;
-
     return quantity * rate;
   }
 
@@ -635,7 +595,6 @@ FillInletChallanForm(order: any): void {
     const subtotal = this.GetSubTotal();
     const discount =
       Number(this.InletChallanForm.get('Discount_Amount')?.value) || 0;
-
     return Math.max(subtotal - discount, 0);
   }
 
@@ -655,12 +614,12 @@ FillInletChallanForm(order: any): void {
     if (!this.InletChallanForm) {
       return;
     }
-
     this.InletChallanForm.patchValue({
       Sub_Total: this.GetSubTotal(),
       Total_Amount: this.GetTotalAmount()
     }, { emitEvent: false });
   }
+
   CalculateProduction(index: number): void {
     const item = this.items.at(index);
 
@@ -690,12 +649,10 @@ FillInletChallanForm(order: any): void {
         Good_Quantity: 0,
         Extra_Quantity: 0
       }, { emitEvent: false });
-
       return;
     }
 
     const good = produced - damaged - faulty;
-
     const extra = Math.max(
       good - manufacturingRequired,
       0

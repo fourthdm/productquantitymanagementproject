@@ -106,3 +106,9 @@ a {
         transform: scale(1.1);
     }
 } */
+
+.line-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* or set a specific width */
+}

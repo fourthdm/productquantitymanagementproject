@@ -3,12 +3,12 @@
 <router-outlet></router-outlet>
 <div class="container-fluid ">
     <br><br><br>
+    <h4>Welcome Admin User</h4>
     <div class="container">
-        <h1>Dashboard</h1>
-        <br>
-        <h4>Welcome Admin User</h4>
+        <!-- <h1>Dashboard</h1> -->
+        <!-- <br> -->
     </div>
-    <br>
+    <!-- <br> -->
 
     <div class="card cards">
         <div class="card-body">
@@ -76,9 +76,9 @@
         </div>
     </div>
 </div>
-<br><br>
 
-<div class="container-fluid">
+
+<!-- <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
             <div class="card">
@@ -100,6 +100,7 @@
                                         <b>Sales Order Number : </b> {{Ch.Sales_Order_Number}} <br>
                                         <b>Customer Name : </b> {{Ch.Customer_Name}} <br>
                                         <b>Company Name : </b> {{Ch.Company_Name}} <br>
+                                        <b>GST Number : </b> {{Ch.GST_No}} <br>
 
                                         <span class="status-line" [ngClass]="{
                                         'status-breakdown': Ch.Sales_Order_Status === 'Cancelled',
@@ -158,36 +159,11 @@
                         <div class="col-md-12" *ngFor="let Ch of Inletchallans">
                             <div class="card carddata">
                                 <div class="card-body">
-                                    <!-- <i class="i fa-solid fa-trash-can text-danger"></i>
-                            <i class="i fa-solid fa-pencil"></i>
-                            <i class="i fa-solid fa-print"></i>
-                            <i class="i fa-regular fa-eye"></i> -->
 
                                     <p>
                                         <b>Challan Code :</b> {{Ch.Challan_Code}} <br>
                                         <b>Customer Name :</b> {{Ch.Customer_Name}} <br>
-                                        <!-- <b>Work Status : </b> <span *ngIf="Ch.Work_Status">
 
-                                    <span *ngIf="Ch.Work_Status === 'In Queue'">
-                                        <i class="fa-solid fa-clock fa-lg text-primary"></i>
-                                    </span>
-
-                                    <span *ngIf="Ch.Work_Status === 'Completed'">
-                                        <i class="fa-solid fa-circle-check fa-lg text-success"></i>
-                                    </span>
-
-                                    <span *ngIf="Ch.Work_Status === 'Hold'">
-                                       <i class="fa-solid fa-circle-pause fa-lg text-warning"></i>
-                                    </span>
-
-                                    <span *ngIf="Ch.Work_Status === 'Processing'">
-                                         <i class="fa-solid fa-arrows-spin fa-lg text-success"></i>
-                                    </span>
-
-                                    <span *ngIf="Ch.Work_Status === 'Breakdown'">                                      
-                                       <i class="fa-solid fa-triangle-exclamation fa-lg text-danger"></i>
-                                    </span>
-                                </span> {{Ch.Work_Status}} <br> -->
                                         <span class="status-line" [ngClass]="{
         'status-breakdown': Ch.Work_Status === 'Breakdown',
         'status-completed': Ch.Work_Status === 'Completed',
@@ -331,20 +307,21 @@
         </div><br>
 
     </div>
-</div>
+</div> -->
 
 <br><br>
 
 <div class="container">
     <div class="card cardchallan">
         <div class="card-body">
-
-            <div class="text-start">
-                <h3>SalesOrders</h3>
-            </div>
-            <div class="text-end">
-                <button> <a class="view" [routerLink]="['/Home/SalesOrderList']" title="View All SalesOrder">View
-                        All</a></button>
+            <div class="line-container">
+                <div class="text-start">
+                    <h3>SalesOrders</h3>
+                </div>
+                <div class="text-end">
+                    <button> <a class="view" [routerLink]="['/Home/SalesOrderList']" title="View All SalesOrder">View
+                            All</a></button>
+                </div>
             </div>
             <br>
             <div class="row">
@@ -390,60 +367,35 @@
 
                         </div>
                     </div>
-                    <br>
+                    <!-- <br> -->
                 </div>
             </div>
-            <br><br>
+            <!-- <br><br> -->
             <hr>
-            <div class="text-start">
-                <h3>Inlet Challan</h3>
-            </div>
-            <div class="text-end">
-                <button> <a class="view" [routerLink]="['/Home/Inletchallan']" title="View All Inlet Challan">View
-                        All</a></button>
+            <div class="line-container">
+                <div class="text-start">
+                    <h3>Inlet Challan</h3>
+                </div>
+                <div class="text-end">
+                    <button> <a class="view" [routerLink]="['/Home/Inletchallan']" title="View All Inlet Challan">View
+                            All</a></button>
+                </div>
             </div>
             <br>
             <div class="row">
                 <div class="col-md-4" *ngFor="let Ch of Inletchallans">
                     <div class="card carddata">
                         <div class="card-body">
-                            <!-- <i class="i fa-solid fa-trash-can text-danger"></i>
-                            <i class="i fa-solid fa-pencil"></i>
-                            <i class="i fa-solid fa-print"></i>
-                            <i class="i fa-regular fa-eye"></i> -->
-
                             <p>
                                 <b>Challan Code :</b> {{Ch.Challan_Code}} <br>
                                 <b>Customer Name :</b> {{Ch.Customer_Name}} <br>
-                                <!-- <b>Work Status : </b> <span *ngIf="Ch.Work_Status">
-
-                                    <span *ngIf="Ch.Work_Status === 'In Queue'">
-                                        <i class="fa-solid fa-clock fa-lg text-primary"></i>
-                                    </span>
-
-                                    <span *ngIf="Ch.Work_Status === 'Completed'">
-                                        <i class="fa-solid fa-circle-check fa-lg text-success"></i>
-                                    </span>
-
-                                    <span *ngIf="Ch.Work_Status === 'Hold'">
-                                       <i class="fa-solid fa-circle-pause fa-lg text-warning"></i>
-                                    </span>
-
-                                    <span *ngIf="Ch.Work_Status === 'Processing'">
-                                         <i class="fa-solid fa-arrows-spin fa-lg text-success"></i>
-                                    </span>
-
-                                    <span *ngIf="Ch.Work_Status === 'Breakdown'">                                      
-                                       <i class="fa-solid fa-triangle-exclamation fa-lg text-danger"></i>
-                                    </span>
-                                </span> {{Ch.Work_Status}} <br> -->
                                 <span class="status-line" [ngClass]="{
-        'status-breakdown': Ch.Work_Status === 'Breakdown',
-        'status-completed': Ch.Work_Status === 'Completed',
-        'status-processing': Ch.Work_Status === 'Processing',
-        'status-hold': Ch.Work_Status === 'Hold',
-        'status-queue': Ch.Work_Status === 'In Queue'
-      }">
+                                    'status-breakdown': Ch.Work_Status === 'Breakdown',
+                                    'status-completed': Ch.Work_Status === 'Completed',
+                                    'status-processing': Ch.Work_Status === 'Processing',
+                                    'status-hold': Ch.Work_Status === 'Hold',
+                                    'status-queue': Ch.Work_Status === 'In Queue'
+                                  }">
                                     <b>Work Status : </b>
                                     <span *ngIf="Ch.Work_Status === 'In Queue'">
                                         <i class="fa-solid fa-clock fa-lg text-primary"></i>
@@ -505,16 +457,21 @@
                         </div>
                     </div>
                 </div>
-            </div> <br><br>
+            </div>
+            <!-- <br><br> -->
 
             <hr>
-            <div class="text-start">
-                <h3>Outward Challan</h3>
+            <div class="line-container">
+                <div class="text-start">
+                    <h3>Outward Challan</h3>
+                </div>
+                <div class="text-end">
+                    <button><a class="view" [routerLink]="['/Home/OutwardChallan']"
+                            title="View All Outward Challan">View
+                            All</a></button>
+                </div>
             </div>
-            <div class="text-end">
-                <button><a class="view" [routerLink]="['/Home/OutwardChallan']" title="View All Outward Challan">View
-                        All</a></button>
-            </div><br>
+            <br>
             <div class="row">
                 <div class="col-md-4" *ngFor="let Ch of VendorChallandata">
                     <div class="card carddata">
@@ -522,7 +479,7 @@
                             <p>
                                 <b>Challan Code :</b> {{Ch.VendorChallan_Code}} <br>
                                 <b>Vendor Name :</b> {{Ch.Vendor_Name}} <br>
-                                <b>Product Status :</b> <span *ngIf="Ch.Product_Status">
+                                <b>Product Status : </b> <span *ngIf="Ch.Product_Status">
                                     <span *ngIf="Ch.Product_Status === 'Received'">
                                         <i class="fa-regular fa-circle-check fa-lg text-success"></i>
                                     </span>
@@ -532,7 +489,7 @@
                                     </span>
 
                                 </span> {{Ch.Product_Status}} <br>
-                                <b>Delivery Status :</b> <span *ngIf="Ch.Delivery_Status">
+                                <b>Delivery Status : </b> <span *ngIf="Ch.Delivery_Status">
                                     <span *ngIf="Ch.Delivery_Status === 'Dispatched'">
                                         <i class="fa-solid fa-truck-fast fa-lg text-warning"></i>
                                     </span>
@@ -562,12 +519,11 @@
 
                                 </span> {{Ch.Challan_Status}} <br>
                             </p>
-
                         </div>
                     </div>
                 </div>
             </div>
-            <br><br>
+            <!-- <br><br> -->
         </div>
     </div>
 </div>

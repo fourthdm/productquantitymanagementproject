@@ -10,9 +10,7 @@ export class RestService {
 
   ApiUrl = 'http://localhost:3000';
   // ApiUrl = 'https://ysurveillance.com/ChallanServer'; 
-
   constructor(private _State: StateService, private _http: HttpClient) { }
-
   Login(data: any) {
     return this._http.post(this.ApiUrl + '/Adminlogin', data);
   }
