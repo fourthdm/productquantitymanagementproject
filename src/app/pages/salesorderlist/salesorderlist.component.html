@@ -1,9 +1,8 @@
-
 <div class="container">
-      <br><br><br>
+    <br><br><br>
     <h2><b>Sales Order List</b></h2>
     <br>
-    
+
     <!-- <app-newsalesoderinletchallan></app-newsalesoderinletchallan> -->
 
     <div class="row">
@@ -73,23 +72,30 @@
                                         {{ Ch.Sales_Order_Status }}
                                     </span>
 
-                                    
-                                          <td><span class="badge bg-warning" *ngIf="Ch.Sales_Order_Status === 'Draft'">Draft </span>
-                <span class="badge bg-success" *ngIf="Ch.Sales_Order_Status === 'Confirm'">Confirm </span>
-                <span class="badge bg-primary" *ngIf="Ch.Sales_Order_Status === 'In Production'">In Production</span>
-                <span class="badge bg-secondary" *ngIf="Ch.Sales_Order_Status === 'Completed'">Completed </span>
-            </td>
-            <td><button *ngIf="Ch.Sales_Order_Status === 'Generate'" class="btn btn-success btn-sm me-2"
-                    (click)="ConfirmSalesOrder(Ch.SalesOrder_id)">
-                    <i class="fa fa-check"></i> Confirm </button>
-                <button *ngIf="Ch.Sales_Order_Status === 'Confirm'" class="btn btn-primary btn-sm"
-                    (click)="CreateInletChallan(Ch.SalesOrder_id)">
-                    <i class="fa fa-file"></i> Create Inlet Challan</button>
-                <button *ngIf="Ch.Sales_Order_Status === 'In Production'" class="btn btn-info btn-sm"
-                    (click)="ViewInletChallan(Ch.Sales_Order_Number)">
-                    <i class="fa fa-eye"></i> View Challan
-                </button>
-            </td>
+
+                                    <td><span class="badge bg-warning" *ngIf="Ch.Sales_Order_Status === 'Draft'">Draft
+                                        </span>
+                                        <span class="badge bg-success"
+                                            *ngIf="Ch.Sales_Order_Status === 'Confirm'">Confirm </span>
+                                        <span class="badge bg-primary"
+                                            *ngIf="Ch.Sales_Order_Status === 'In Production'">In Production</span>
+                                        <span class="badge bg-secondary"
+                                            *ngIf="Ch.Sales_Order_Status === 'Completed'">Completed </span>
+                                    </td>
+                                    <td><button *ngIf="Ch.Sales_Order_Status === 'Generate'"
+                                            class="btn btn-success btn-sm me-2"
+                                            (click)="ConfirmSalesOrder(Ch.SalesOrder_id)">
+                                            <i class="fa fa-check"></i> Confirm </button>
+                                        <button *ngIf="Ch.Sales_Order_Status === 'Confirm'"
+                                            class="btn btn-primary btn-sm"
+                                            (click)="CreateInletChallan(Ch.SalesOrder_id)">
+                                            <i class="fa fa-file"></i> Create Inlet Challan</button>
+                                        <button *ngIf="Ch.Sales_Order_Status === 'In Production'"
+                                            class="btn btn-info btn-sm"
+                                            (click)="ViewInletChallan(Ch.Sales_Order_Number)">
+                                            <i class="fa fa-eye"></i> View Challan
+                                        </button>
+                                    </td>
 
                                 </p>
                             </div>
@@ -373,93 +379,90 @@
                     <div class="table-responsive" formArrayName="items">
                         <table class="table table-bordered table-striped align-middle">
 
-                                 <thead class="table-dark">
-                                    <tr>
-                                        <th>Sr.</th>
-                                        <th>Product Name</th>
-                                        <th>HSN</th>
-                                        <th>Product Qty</th>
-                                        <th>Ordered Qty</th>
-                                        <th>Available Stock</th>
-                                        <th>Stock Used</th>
-                                        <th>Manufacturing Required</th>
-                                        <th>Produced Qty</th>
-                                        <th>Damaged Qty</th>
-                                        <th>Faulty Qty</th>
-                                        <th>Good Qty</th>
-                                        <th>Extra Qty</th>
-                                        <th>Rate (₹)</th>
-                                    </tr>
-                                </thead>
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Sr.</th>
+                                    <th>Product Name</th>
+                                    <th>HSN</th>
+                                    <th>Product Qty</th>
+                                    <th>Ordered Qty</th>
+                                    <th>Available Stock</th>
+                                    <th>Stock Used</th>
+                                    <th>Manufacturing Required</th>
+                                    <th>Produced Qty</th>
+                                    <th>Damaged Qty</th>
+                                    <th>Faulty Qty</th>
+                                    <th>Good Qty</th>
+                                    <th>Extra Qty</th>
+                                    <th>Rate (₹)</th>
+                                </tr>
+                            </thead>
 
-                                <tbody>
-                                    <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                            <tbody>
+                                <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
 
-                                        <td>{{ i + 1 }}</td>
+                                    <td>{{ i + 1 }}</td>
 
-                                        <td>
-                                            <input type="text" class="form-control" formControlName="Product_Name"
-                                                readonly>
-                                        </td>
+                                    <td>
+                                        <input type="text" class="form-control" formControlName="Product_Name" readonly>
+                                    </td>
 
-                                        <td>
-                                            <input type="text" class="form-control" formControlName="HSN_Code" readonly>
-                                        </td>
+                                    <td>
+                                        <input type="text" class="form-control" formControlName="HSN_Code" readonly>
+                                    </td>
 
-                                        <td>
-                                            <input type="number" class="form-control" formControlName="Product_Quantity"
-                                                min="0">
-                                        </td>
+                                    <td>
+                                        <input type="number" class="form-control" formControlName="Product_Quantity"
+                                            min="0">
+                                    </td>
 
-                                        <td>
-                                            <input type="number" class="form-control" formControlName="Ordered_Quantity"
-                                                readonly>
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control"
-                                                formControlName="Available_Extra_Stock" readonly>
-                                        </td>
+                                    <td>
+                                        <input type="number" class="form-control" formControlName="Ordered_Quantity"
+                                            readonly>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control"
+                                            formControlName="Available_Extra_Stock" readonly>
+                                    </td>
 
-                                        <td>
-                                            <input type="number" class="form-control" formControlName="Stock_Used"
-                                                readonly>
-                                        </td>
+                                    <td>
+                                        <input type="number" class="form-control" formControlName="Stock_Used" readonly>
+                                    </td>
 
-                                        <td>
-                                            <input type="number" class="form-control"
-                                                formControlName="Manufacturing_Required" readonly>
-                                        </td>
-                                        <td>
-                                            <input type="number" class="form-control"
-                                                formControlName="Produced_Quantity" min="0"
-                                                (input)="CalculateProduction(i)">
-                                        </td>
+                                    <td>
+                                        <input type="number" class="form-control"
+                                            formControlName="Manufacturing_Required" readonly>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" formControlName="Produced_Quantity"
+                                            min="0" (input)="CalculateProduction(i)">
+                                    </td>
 
-                                        <td>
-                                            <input type="number" class="form-control" formControlName="Damaged_Quantity"
-                                                min="0" (input)="CalculateProduction(i)">
-                                        </td>
+                                    <td>
+                                        <input type="number" class="form-control" formControlName="Damaged_Quantity"
+                                            min="0" (input)="CalculateProduction(i)">
+                                    </td>
 
-                                        <td>
-                                            <input type="number" class="form-control" formControlName="Faulty_Quantity"
-                                                min="0" (input)="CalculateProduction(i)">
-                                        </td>
+                                    <td>
+                                        <input type="number" class="form-control" formControlName="Faulty_Quantity"
+                                            min="0" (input)="CalculateProduction(i)">
+                                    </td>
 
-                                        <td>
-                                            <input type="number" class="form-control" formControlName="Good_Quantity"
-                                                readonly>
-                                        </td>
+                                    <td>
+                                        <input type="number" class="form-control" formControlName="Good_Quantity"
+                                            readonly>
+                                    </td>
 
-                                        <td>
-                                            <input type="number" class="form-control" formControlName="Extra_Quantity"
-                                                readonly>
-                                        </td>
+                                    <td>
+                                        <input type="number" class="form-control" formControlName="Extra_Quantity"
+                                            readonly>
+                                    </td>
 
-                                        <td>
-                                            <input type="number" class="form-control" formControlName="Rate" min="0">
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                    <td>
+                                        <input type="number" class="form-control" formControlName="Rate" min="0">
+                                    </td>
+                                </tr>
+                            </tbody>
 
                         </table>
                     </div>
@@ -467,12 +470,22 @@
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label"> Mode of Transport </label>
-                            <input type="text" class="form-control" formControlName="Mode_of_Transport">
+                            <select class="form-control" formControlName="Mode_of_Transport">
+                                <option value="">-- Select Mode Of Transport --</option>
+                                <option value="Road Transport">Road Transport</option>
+                                <option value="Sea/Maritime Transport">Sea/Maritime Transport</option>
+                                <option value="Air Transport">Air Transport</option>
+                                <option value="Rail Transport">Rail Transport</option>
+                                <option value="Multimodal and Intermodal Transport">Multimodal and Intermodal
+                                    Transport</option>
+                            </select> <br>
+                            <!-- <input type="text" class="form-control" formControlName="Mode_of_Transport"> -->
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label"> Transporter Name</label>
                             <input type="text" class="form-control" formControlName="Transporter_Name">
                         </div>
+
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Vehicle Number </label>
                             <input type="text" class="form-control" formControlName="Vehicle_Number">

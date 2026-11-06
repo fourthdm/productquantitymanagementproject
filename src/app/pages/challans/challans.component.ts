@@ -60,8 +60,40 @@ export class ChallansComponent implements OnInit {
       .get('Discount_Amount')!
       .valueChanges.subscribe(() => this.calculateGrandTotal());
     // Keep your existing API method that loads AllSaleorders.
+
+    this.AddVendorChallanform.get('Vendor_Name')!
+      .valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe(VendorName => {
+        this.autoFillbyVendor(VendorName);
+        this.calculateVendorGrandTotal();
+      });
+
+
     this.GetAllSalesOrders();
+    this.GetAllVendors();
+    this.AllVendorchallanDetails();
   }
+
+
+  GetAllVendors() {
+    this._rest.AllVendor().subscribe((data: any) => {
+      console.log(data);
+      this.AllVendordata = data.data;
+    }, (err: any) => {
+      console.log(err);
+    });
+  }
+
+  AllVendorchallanDetails() {
+    this._rest.ALlvendorChallandata().subscribe((data: any) => {
+      console.log(data);
+      this.AllVendorchallan = data.data;
+    }, (err: any) => {
+      console.log(err);
+    });
+  }
+
 
   GetAllSalesOrders(): void {
     this._rest.AllSalesOrders()
