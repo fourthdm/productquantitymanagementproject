@@ -94,7 +94,6 @@ export class RestService {
   //   return this._http.post(this.ApiUrl + "/Deletecustomer/" + Customer_id, { Password }, { headers });
   // }
 
-
   CustomerDeletionHistory() {
     this._State.CheckToken();
     const headers = new HttpHeaders({ 'x-access-token': this._State.token });
@@ -355,6 +354,24 @@ export class RestService {
     return this._http.get<any>(this.ApiUrl + "/GetVendorChallanDeletionHistorybyid/" + DeletionHistory_id, { headers });
   }
 
+  ViewCustomerDeletionHistory(CustomerDeletion_id: any) {
+    this._State.CheckToken();
+    const headers = new HttpHeaders({ 'x-access-token': this._State.token });
+    return this._http.get<any>(this.ApiUrl + "/GetCustomerDeletionHistoryById/" + CustomerDeletion_id, { headers });
+  }
+
+  ViewVendorDeletionHistory(VendorDeletion_id : any) {
+    this._State.CheckToken();
+    const headers = new HttpHeaders({ 'x-access-token': this._State.token });
+    return this._http.get<any>(this.ApiUrl + "/GetVendorDeletionHistoryById/" + VendorDeletion_id, { headers });
+  }
+
+  ViewAdminDeletionHistory(AdminDeletion_id : any) {
+    this._State.CheckToken();
+    const headers = new HttpHeaders({ 'x-access-token': this._State.token });
+    return this._http.get<any>(this.ApiUrl + "/GetAdminDeletionHistoryById/" + AdminDeletion_id, { headers });
+  }
+
   Dashboardvendorchallan() {
     return this._http.get(this.ApiUrl + '/LimitedVendorChallan');
   }
@@ -420,37 +437,26 @@ export class RestService {
     return this._http.get(this.ApiUrl + `/Allproduct_excess_stock`);
   }
 
+  GetProductExtraStock(Product_Name: string, HSN_Code: string) {
+    const params = new HttpParams()
+      .set('Product_Name', Product_Name)
+      .set('HSN_Code', HSN_Code || '');
 
-  // GetProductExtraStock(
-  //   Product_Name: string,
-  //   HSN_Code: string
-  // ) {
-  //   return this._http.get<any>(
-  //     `${this.ApiUrl}/GetProductExtraStock`,
-  //     {params: { Product_Name, HSN_Code: HSN_Code || '' }}
-  //   );
-  // }
+    return this._http.get<any>(
+      `${this.ApiUrl}/GetProductExtraStock`,
+      { params }
+    );
+  }
 
-GetProductExtraStock(Product_Name: string, HSN_Code: string) {
-  const params = new HttpParams()
-    .set('Product_Name', Product_Name)
-    .set('HSN_Code', HSN_Code || '');
-
-  return this._http.get<any>(
-    `${this.ApiUrl}/GetProductExtraStock`,
-    { params }
-  );
-}
-
-UpdateInletProductProduction(
-  InletProduct_id: number,
-  payload: any
-) {
-  return this._http.put<any>(
-    `${this.ApiUrl}/UpdateInletProductProduction/${InletProduct_id}`,
-    payload
-  );
-}
+  UpdateInletProductProduction(
+    InletProduct_id: number,
+    payload: any
+  ) {
+    return this._http.put<any>(
+      `${this.ApiUrl}/UpdateInletProductProduction/${InletProduct_id}`,
+      payload
+    );
+  }
 
 }
 

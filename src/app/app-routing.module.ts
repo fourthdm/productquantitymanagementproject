@@ -20,9 +20,10 @@ import { VendorchallandeletedComponent } from './deletedhistory/vendorchallandel
 import { InletchallandeletedComponent } from './deletedhistory/inletchallandeleted/inletchallandeleted.component';
 import { SalesorderlistComponent } from './pages/salesorderlist/salesorderlist.component';
 import { ProductdetailsComponent } from './pages/productdetails/productdetails.component';
+import { VendorreceiptComponent } from './vendorsreceipts/vendorreceipt/vendorreceipt.component';
 
 const routes: Routes = [
-    { path: ' ', redirectTo: 'login', pathMatch: "full" },
+  { path: ' ', redirectTo: 'login', pathMatch: "full" },
   { path: 'login', component: LoginComponent },
   {
     path: 'Home', component: HomeComponent, children: [
@@ -32,7 +33,7 @@ const routes: Routes = [
       { path: 'Customer', component: CustomerComponent },
       { path: 'Vendor', component: VendorComponent },
       { path: 'Challan', component: ChallansComponent },
-      { path: 'ProductDetails', component:ProductdetailsComponent },
+      { path: 'ProductDetails', component: ProductdetailsComponent },
       { path: 'Salesorder', component: SalesorderComponent },
       { path: 'SalesOrderList', component: SalesorderlistComponent },
       { path: 'SalesorderData/:SalesOrder_id', component: SalesorderviewComponent },
@@ -43,7 +44,7 @@ const routes: Routes = [
       { path: 'OutwardChallan', component: OutwardchallanComponent },
       { path: 'OutwardChallanData/:VendorChallan_id', component: OutwardchallanviewComponent },
 
-      // { path: 'Vendorreceipts/:VendorChallan_id', component: VendorreceiptsComponent },
+      { path: 'Vendorreceipts/:VendorChallan_id', component: VendorreceiptComponent },
 
       { path: 'Deleteddata', component: DeleteddataComponent },
       { path: 'DeletedOutwardChallanHistory/:DeletionHistory_id', component: VendorchallandeletedComponent },

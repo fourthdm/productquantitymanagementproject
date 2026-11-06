@@ -28,6 +28,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { SalesorderlistComponent } from './pages/salesorderlist/salesorderlist.component';
 import { ProductdetailsComponent } from './pages/productdetails/productdetails.component';
+import { VendorreceiptComponent } from './vendorsreceipts/vendorreceipt/vendorreceipt.component';
+import { AdmindeletedComponent } from './deletedhistory/admindeleted/admindeleted.component';
+import { CustomerdeletedComponent } from './deletedhistory/customerdeleted/customerdeleted.component';
+import { VendordeletedComponent } from './deletedhistory/vendordeleted/vendordeleted.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +57,11 @@ import { ProductdetailsComponent } from './pages/productdetails/productdetails.c
     SalesorderviewComponent,
     ChallanbysaleordernumberComponent,
     SalesorderlistComponent,
-    ProductdetailsComponent
+    ProductdetailsComponent,
+    VendorreceiptComponent,
+    AdmindeletedComponent,
+    CustomerdeletedComponent,
+    VendordeletedComponent
   ],
   imports: [
     BrowserModule,

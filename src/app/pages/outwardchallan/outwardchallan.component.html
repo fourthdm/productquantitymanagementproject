@@ -97,9 +97,9 @@
     <br>
     <div class="card externalcard">
 
-        <!-- <div class="text-end">
+        <div class="text-end">
             <button class="btn btn-success" [routerLink]="['/Home/Vendorreceipts']">Vendor Challan Receipts</button>
-        </div> -->
+        </div>
         <br>
         <div class="card-body">
             <div class="row" *ngIf="AllVendorChallan.length == 0">
@@ -128,12 +128,11 @@
                                 [routerLink]="['/Home/OutwardChallanData', Ch.VendorChallan_id]"
                                 title="View a Vendor Challan Details"></i>
 
-
-                            <!-- <button type="button" class="btn btn-sm btn-primary"
+                            <button type="button" class="btn btn-sm btn-primary"
                                 [routerLink]="['/Home/Vendorreceipts', Ch.VendorChallan_id]">
                                 <i class="bi bi-box-seam"></i>
                                 Receive Product
-                            </button> -->
+                            </button>
 
                             <br><br>
                             <p>
