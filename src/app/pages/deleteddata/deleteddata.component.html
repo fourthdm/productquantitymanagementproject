@@ -1,7 +1,6 @@
 <div class="container">
     <br><br><br>
     <div class="container">
-
         <div class="text-center">
             <h1>All Deleted Data</h1>
         </div>
@@ -201,10 +200,10 @@
                                 <tbody>
                                     <tr *ngFor=" let CustomerHistory of AllCustomerDeletionHistory; let i = index ">
                                         <td> {{ i + 1 }} </td>
-                                        <td> {{ CustomerHistory.CustomerDeletion_id }}</td>
-                                        <!-- <i class="fa-regular fa-eye i"
-                                                [routerLink]="['/Home/DeletedInletChallanHistory', Vendorhistory.Deletionchallan_id]"
-                                                title="View a Challan Deleted Details"></i> -->
+                                        <td> {{ CustomerHistory.CustomerDeletion_id }}
+                                        <i class="fa-regular fa-eye i"
+                                                [routerLink]="['/Home/DeletedCustomerHistory', CustomerHistory.CustomerDeletion_id]"
+                                                title="View a Challan Deleted Details"></i></td>
                                         <td> {{ CustomerHistory.Customer_Code }} </td>
                                         <td> {{ CustomerHistory.Deleted_By_Admin_Name }} </td>
                                         <td> {{ CustomerHistory.Deletion_Reason }} </td>

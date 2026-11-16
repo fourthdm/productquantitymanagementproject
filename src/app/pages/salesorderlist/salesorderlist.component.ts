@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RestService } from 'src/app/services/rest.service';
@@ -11,7 +11,15 @@ declare var bootstrap: any;
   styleUrls: ['./salesorderlist.component.css']
 })
 export class SalesorderlistComponent {
+
+  @Input() HSN_Code: any;
+  @Input() Customer_Name: any;
+  @Input() Company_Name: any;
+  @Input() Added_Date: any;
+  @Input() Sales_Order_Status: any;
+
   SelectedSalesOrder: any = null;
+  AllHSNCode: any[] = [];
   AllSaleorders: any[] = [];
   AllCustomerData: any[] = [];
   UpdateSalesOrderform: FormGroup;
@@ -22,7 +30,6 @@ export class SalesorderlistComponent {
   pro: any;
 
   constructor(private _rest: RestService, private fb: FormBuilder, private router: Router) {
-
     this.InletChallanForm = this.fb.group({
       Sales_Order_Number: [''],
       Customer_Name: [''],
@@ -64,12 +71,32 @@ export class SalesorderlistComponent {
 
   ngOnInit(): void {
     this.AllSalesOrderDetails();
+    this.AllHSNCodes();
+    this.AllCustomer();
+  }
+
+  AllCustomer() {
+    this._rest.AllCustomer().subscribe((data: any) => {
+      console.log(data);
+      this.AllCustomerData = data.data;
+    }, (err: any) => {
+      console.log(err);
+    });
   }
 
   AllSalesOrderDetails() {
     this._rest.AllSalesOrders().subscribe((data: any) => {
       console.log(data);
       this.AllSaleorders = data.data;
+    }, (err: any) => {
+      console.log(err);
+    });
+  }
+
+  AllHSNCodes() {
+    this._rest.HSNCodes().subscribe((data: any) => {
+      console.log(data);
+      this.AllHSNCode = data.data;
     }, (err: any) => {
       console.log(err);
     });
@@ -281,7 +308,6 @@ export class SalesorderlistComponent {
     });
   }
 
-
   ConfirmSalesOrder(SalesOrder_id: number): void {
     if (!confirm('Are you sure you want to confirm this Sales Order?')
     ) {
@@ -357,43 +383,32 @@ export class SalesorderlistComponent {
   //     }
   //   });
   // }
-  
+
   CreateInletChallan(SalesOrder_id: number) {
-
-  this._rest.SalesOrderbyId(SalesOrder_id).subscribe({
-
-    next: (res: any) => {
-
-      console.log('Complete Sales Order:', res.data);
-
-      if (!res.success || !res.data) {
-        alert('Sales order details not found');
-        return;
+    this._rest.SalesOrderbyId(SalesOrder_id).subscribe({
+      next: (res: any) => {
+        console.log('Complete Sales Order:', res.data);
+        if (!res.success || !res.data) {
+          alert('Sales order details not found');
+          return;
+        }
+        const order = res.data;
+        this.SelectedSalesOrder = order;
+        this.FillInletChallanForm(order);
+        const modalElement = document.getElementById(
+          'createInletChallanModal'
+        );
+        if (modalElement) {
+          const modal = new bootstrap.Modal(modalElement);
+          modal.show();
+        }
+      },
+      error: (err: any) => {
+        console.error(err);
+        alert('Unable to fetch sales order details');
       }
-
-      const order = res.data;
-
-      this.SelectedSalesOrder = order;
-
-      this.FillInletChallanForm(order);
-
-      const modalElement = document.getElementById(
-        'createInletChallanModal'
-      );
-
-      if (modalElement) {
-        const modal = new bootstrap.Modal(modalElement);
-        modal.show();
-      }
-    },
-
-    error: (err: any) => {
-      console.error(err);
-      alert('Unable to fetch sales order details');
-    }
-
-  });
-}
+    });
+  }
   get items(): FormArray {
     return this.InletChallanForm.get(
       'items'
@@ -699,5 +714,76 @@ export class SalesorderlistComponent {
       }
     });
   }
+
+  DatabyHSNCode() {
+    this._rest.SalesorderByHSNCode({ HSN_Code: this.HSN_Code }).subscribe((data: any) => {
+      if (data && data.data && data.data.length > 0) {
+        console.log(data);
+        this.AllSaleorders = data.data;
+      } else {
+        this.AllSaleorders = [];
+      }
+      this.HSN_Code = '';
+    }, (err: any) => {
+      console.log(err);
+    })
+  }
+
+  DatabyCustomerName() {
+    this._rest.SalesorderByCustomerName({ Customer_Name: this.Customer_Name }).subscribe((data: any) => {
+      if (data && data.data && data.data.length > 0) {
+        console.log(data);
+        this.AllSaleorders = data.data;
+      } else {
+        this.AllSaleorders = [];
+      }
+      this.Customer_Name = '';
+    }, (err: any) => {
+      console.log(err);
+    })
+  }
+
+  DatabyCompanyName() {
+    this._rest.SalesorderByCompanyname({ Company_Name: this.Company_Name }).subscribe((data: any) => {
+      if (data && data.data && data.data.length > 0) {
+        console.log(data);
+        this.AllSaleorders = data.data;
+      } else {
+        this.AllSaleorders = [];
+      }
+      this.Company_Name = '';
+    }, (err: any) => {
+      console.log(err);
+    });
+  }
+
+  DatabyDate() {
+    this._rest.SalesOrderByAddedDate({ Added_Date: this.Added_Date }).subscribe((data: any) => {
+      if (data && data.data && data.data.length > 0) {
+        console.log(data);
+        this.AllSaleorders = data.data;
+      } else {
+        this.AllSaleorders = [];
+      }
+      this.Added_Date = '';
+    }, (err: any) => {
+      console.log(err);
+    });
+  }
+
+  DatabySales_Order_Status() {
+    this._rest.SalesOrderBySalesOrderStatus({ Sales_Order_Status: this.Sales_Order_Status }).subscribe((data: any) => {
+      if (data && data.data && data.data.length > 0) {
+        console.log(data);
+        this.AllSaleorders = data.data;
+      } else {
+        this.AllSaleorders = [];
+      }
+      this.Sales_Order_Status = '';
+    }, (err: any) => {
+      console.log(err);
+    });
+  }
+
 
 }

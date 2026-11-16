@@ -30,69 +30,45 @@
             <strong>Reason:</strong>
             {{ h.Deletion_Reason }}
         </p>
-
-
-        <hr>
-
-        <h5>Deleted Sales Order Data</h5>
-        <div *ngIf="h.SalesOrder_Data">
+       <hr>
+        <h5>Deleted Customer Data</h5>
+        <div *ngIf="h.Customer_Data">
 
             <div class="row">
                 <div class="col-md-6">
-                    <b>Sales Order Code : </b>
-                    {{ h.SalesOrder_Data.Sales_Order_Number }}
+                    <b>Customer Code : </b>
+                    {{ h.Customer_Data.Customer_Code }}
 
                     <br>
 
                     <b>Customer Name : </b>
-                    {{ h.SalesOrder_Data.Customer_Name }}
+                    {{ h.Customer_Data.Customer_Name }}
                     <br>
 
                     <b>Company Name : </b>
-                    {{ h.SalesOrder_Data.Company_Name }}
+                    {{ h.Customer_Data.Company_Name }}
                     <br>
 
                     <b>Company Address : </b>
-                    {{ h.SalesOrder_Data.Company_Address }}
+                    {{ h.Customer_Data.Company_Address }}
+                    <br>
+
+                    <b>Delivery Address : </b>
+                    {{ h.Customer_Data.Delivery_Address }}
                     <br>
 
                     <b>Company GST No. : </b>
-                    {{ h.SalesOrder_Data.GST_No }}
-                    <br>
-
-                    <b>Sub Total :</b>
-                    {{ h.SalesOrder_Data.Sub_Total }} &#8377;.
-                    <br>
-
-                    <b>Total Amount :</b>
-                    {{ h.SalesOrder_Data.Total_Amount }} &#8377;.
-                    <br>
-
-                    <b>Discount Amount :</b>
-                    {{ h.SalesOrder_Data.Discount_Amount }} &#8377;.
-                    <br>
-
-                    <b>CGST amount :</b>
-                    {{ h.SalesOrder_Data.CGST_amount }} &#8377;.
-                    <br>
-
-                    <b>Grand Total :</b>
-                    {{ h.SalesOrder_Data.Grand_Total }} &#8377;.
+                    {{ h.Customer_Data.GST_No }}
                     <br>
                 </div>
 
                 <div class="col-md-6">
-                    <b>Remark :</b>
-                    {{ h.SalesOrder_Data.Remark }}
-                    <br>
-                    <b>Sales Order Status :</b>
-                    {{ h.SalesOrder_Data.Sales_Order_Status }}
-                    <br>
+                    
                     <b>Added Date :</b>
-                    {{ h.SalesOrder_Data.Added_Date | date }}
+                    {{ h.Customer_Data.Added_Date | date }}
                     <br>
                     <b>Updated Date :</b>
-                    {{ h.SalesOrder_Data.Updated_Date | date}}
+                    {{ h.Customer_Data.Updated_Date | date}}
                     <br>
                     <br>
                 </div>

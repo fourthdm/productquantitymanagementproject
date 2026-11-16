@@ -186,6 +186,30 @@ export class RestService {
     return this._http.get(this.ApiUrl + '/AllSalesOrder');
   }
 
+  HSNCodes(){
+    return this._http.get(this.ApiUrl + '/HSNCodes');
+  }
+  
+  SalesorderByHSNCode(data:any){
+    return this._http.post(this.ApiUrl + '/SalesOrderByHSNCode', data);
+  }
+
+  SalesorderByCustomerName(data:any){
+    return this._http.post(this.ApiUrl + '/SalesOrderByCustomerName', data);
+  }
+
+  SalesorderByCompanyname(data:any){
+    return this._http.post(this.ApiUrl + '/SalesOrderByCompanyName', data);
+  }
+
+  SalesOrderByAddedDate(data:any){
+    return this._http.post(this.ApiUrl + '/SalesOrderByAdded_Date', data);
+  }
+
+  SalesOrderBySalesOrderStatus(data:any){
+    return this._http.post(this.ApiUrl + '/SalesOrderBySales_Order_Status', data);
+  }
+
   SalesOrderbyId(SalesOrder_id: any) {
     return this._http.get(this.ApiUrl + '/SalesOrderbyId/' + SalesOrder_id);
   }
@@ -360,13 +384,13 @@ export class RestService {
     return this._http.get<any>(this.ApiUrl + "/GetCustomerDeletionHistoryById/" + CustomerDeletion_id, { headers });
   }
 
-  ViewVendorDeletionHistory(VendorDeletion_id : any) {
+  ViewVendorDeletionHistory(VendorDeletion_id: any) {
     this._State.CheckToken();
     const headers = new HttpHeaders({ 'x-access-token': this._State.token });
     return this._http.get<any>(this.ApiUrl + "/GetVendorDeletionHistoryById/" + VendorDeletion_id, { headers });
   }
 
-  ViewAdminDeletionHistory(AdminDeletion_id : any) {
+  ViewAdminDeletionHistory(AdminDeletion_id: any) {
     this._State.CheckToken();
     const headers = new HttpHeaders({ 'x-access-token': this._State.token });
     return this._http.get<any>(this.ApiUrl + "/GetAdminDeletionHistoryById/" + AdminDeletion_id, { headers });
@@ -423,14 +447,7 @@ export class RestService {
   }
 
   GetHSNByProductName(Product_Name: string) {
-    return this._http.get<any>(
-      `${this.ApiUrl}/GetHSNByProductName`,
-      {
-        params: {
-          Product_Name: Product_Name
-        }
-      }
-    );
+    return this._http.get<any>(`${this.ApiUrl}/GetHSNByProductName`, { params: { Product_Name: Product_Name } });
   }
 
   ExtraProduct() {
@@ -438,25 +455,13 @@ export class RestService {
   }
 
   GetProductExtraStock(Product_Name: string, HSN_Code: string) {
-    const params = new HttpParams()
-      .set('Product_Name', Product_Name)
-      .set('HSN_Code', HSN_Code || '');
-
-    return this._http.get<any>(
-      `${this.ApiUrl}/GetProductExtraStock`,
-      { params }
-    );
+    const params = new HttpParams().set('Product_Name', Product_Name).set('HSN_Code', HSN_Code || '');
+    return this._http.get<any>(`${this.ApiUrl}/GetProductExtraStock`, { params });
   }
 
-  UpdateInletProductProduction(
-    InletProduct_id: number,
-    payload: any
-  ) {
-    return this._http.put<any>(
-      `${this.ApiUrl}/UpdateInletProductProduction/${InletProduct_id}`,
-      payload
-    );
-  }
+  UpdateInletProductProduction(InletProduct_id: number, payload: any)
+   {
+     return this._http.put<any>(`${this.ApiUrl}/UpdateInletProductProduction/${InletProduct_id}`, payload); 
+    }
 
 }
-

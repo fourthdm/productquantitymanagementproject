@@ -26,7 +26,7 @@
                 </select>
             </label>
             <button style="margin-left: 3%;" class="btn btn-success" (click)="DatabyCompanyname()">Search</button>
-            <button class="btn btn-secondary" (click)="AllchallanDetails()"  title="Reset Challan data"><i
+            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data"><i
                     class="fa-solid fa-arrows-rotate"></i></button><br>
         </div>
         <br>
@@ -43,7 +43,7 @@
                 </select>
             </label>
             <button style="margin-left: 3%;" class="btn btn-success" (click)="DatabyWorkStatus()">Search</button>
-            <button class="btn btn-secondary" (click)="AllchallanDetails()"  title="Reset Challan data"><i
+            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data"><i
                     class="fa-solid fa-arrows-rotate"></i></button><br>
         </div>
         <br>
@@ -58,7 +58,7 @@
                 </select>
             </label>
             <button style="margin-left: 3%;" class="btn btn-success" (click)="DatabyDeliveryStatus()">Search</button>
-            <button class="btn btn-secondary" (click)="AllchallanDetails()"  title="Reset Challan data"><i
+            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data"><i
                     class="fa-solid fa-arrows-rotate"></i></button>
             <br>
         </div>
@@ -74,7 +74,7 @@
                 </select>
             </label>
             <button style="margin-left: 3%;" class="btn btn-success" (click)="DatabyChallanStatus()">Search</button>
-            <button class="btn btn-secondary" (click)="AllchallanDetails()"  title="Reset Challan data"><i
+            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data"><i
                     class="fa-solid fa-arrows-rotate"></i></button><br>
         </div>
         <br>
@@ -83,7 +83,7 @@
             <label for="Added_Date"> <b>Select Date .</b></label> <br>
             <input type="date" [(ngModel)]="Added_Date" value="Added_Date">
             <button style="margin-left: 3%;" class="btn btn-success" (click)="DatabyDate()">Search</button>
-            <button class="btn btn-secondary" (click)="AllchallanDetails()"  title="Reset Challan data"><i
+            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data"><i
                     class="fa-solid fa-arrows-rotate"></i></button><br>
         </div>
         <br>
@@ -116,11 +116,14 @@
                                 <i class="fa-solid fa-trash-can text-danger i"></i>
                             </a>
                             <i class="fa-solid fa-pencil i" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                title="Edit a Challan" (click)="editRequirement(Ch.Challan_id)" title="Update a Challan"></i>
+                                title="Edit a Challan" (click)="editRequirement(Ch.Challan_id)"
+                                title="Update a Challan"></i>
 
-                            <i class="fa-solid fa-print i" (click)="printPdf(Ch.Challan_id)"  title="Print a Challan"></i>
+                            <i class="fa-solid fa-print i" (click)="printPdf(Ch.Challan_id)"
+                                title="Print a Challan"></i>
 
-                            <i class="fa-regular fa-eye i" [routerLink]="['/Home/InletchallanData', Ch.Challan_id]" title="View a Challan Details"></i>
+                            <i class="fa-regular fa-eye i" [routerLink]="['/Home/InletchallanData', Ch.Challan_id]"
+                                title="View a Challan Details"></i>
                             <br>
                             <br>
                             <p>
@@ -128,12 +131,11 @@
                                 <b>Customer Name :</b> {{Ch.Customer_Name}} <br>
 
                                 <span class="status-line" [ngClass]="{
-        'status-breakdown': Ch.Work_Status === 'Breakdown',
-        'status-completed': Ch.Work_Status === 'Completed',
-        'status-processing': Ch.Work_Status === 'Processing',
-        'status-hold': Ch.Work_Status === 'Hold',
-        'status-queue': Ch.Work_Status === 'In Queue'
-      }">
+                                            'status-breakdown': Ch.Work_Status === 'Breakdown',
+                                            'status-completed': Ch.Work_Status === 'Completed',
+                                            'status-processing': Ch.Work_Status === 'Processing',
+                                            'status-hold': Ch.Work_Status === 'Hold',
+                                            'status-queue': Ch.Work_Status === 'In Queue' }">
                                     <b>Work Status : </b>
                                     <span *ngIf="Ch.Work_Status === 'In Queue'">
                                         <i class="fa-solid fa-clock fa-lg text-primary"></i>
@@ -151,68 +153,35 @@
                                         <i class="fa-solid fa-arrows-spin fa-lg text-success"></i>
                                     </span>
 
-                                    <span *ngIf="Ch.Work_Status === 'Breakdown'" class="animate__animated animate__flash animate__infinite">
+                                    <span *ngIf="Ch.Work_Status === 'Breakdown'"
+                                        class="animate__animated animate__flash animate__infinite">
                                         <i class="fa-solid fa-triangle-exclamation fa-lg"></i>
-                                    </span> 
+                                    </span>
 
                                     {{ Ch.Work_Status }}
                                 </span>
-                                <!-- <span >
-                                    <b>Work Status : </b> <span *ngIf="Ch.Work_Status">
-
-                                        <span *ngIf="Ch.Work_Status === 'In Queue'">
-                                            <i class="fa-solid fa-clock fa-lg text-primary"></i>
-                                        </span>
-
-                                        <span *ngIf="Ch.Work_Status === 'Completed'">
-                                            <i class="fa-solid fa-circle-check fa-lg text-success"></i>
-                                        </span>
-
-                                        <span *ngIf="Ch.Work_Status === 'Hold'">
-                                            <i class="fa-solid fa-circle-pause fa-lg text-warning"></i>
-                                        </span>
-
-                                        <span *ngIf="Ch.Work_Status === 'Processing'">
-                                            <i class="fa-solid fa-arrows-spin fa-lg text-success"></i>
-                                        </span>
-
-                                        <span *ngIf="Ch.Work_Status === 'Breakdown'">
-                                            <i class="fa-solid fa-triangle-exclamation fa-lg text-danger"></i>
-                                        </span>
-                                    </span> {{Ch.Work_Status}}
-                                </span> -->
-
                                 <br>
                                 <b>Delivery Status : </b> <span *ngIf="Ch.Delivery_Status">
-
                                     <span *ngIf="Ch.Delivery_Status === 'In Transport'">
                                         <i class="fa-solid fa-truck-fast fa-lg text-warning"></i>
                                     </span>
-
                                     <span *ngIf="Ch.Delivery_Status === 'Delivered'">
                                         <i class="fa-solid fa-handshake fa-lg text-success"></i>
                                     </span>
-
                                     <span *ngIf="Ch.Delivery_Status === 'Not Delivered'">
                                         <i class="fa-solid fa-truck-fast fa-lg text-danger"></i>
                                     </span>
-
                                 </span> {{Ch.Delivery_Status}} <br>
-
                                 <b>Challan Status : </b> <span *ngIf="Ch.Challan_Status">
-
                                     <span *ngIf="Ch.Challan_Status === 'Open'">
                                         <i class="fa-solid fa-clipboard-list fa-lg text-secondary"></i>
                                     </span>
-
                                     <span *ngIf="Ch.Challan_Status === 'Close'">
                                         <i class="fa-regular fa-circle-check fa-lg text-success"></i>
                                     </span>
-
                                     <span *ngIf="Ch.Challan_Status === 'Not Close'">
                                         <i class="fa-regular fa-circle-xmark fa-lg text-danger"></i>
                                     </span>
-
                                 </span> {{Ch.Challan_Status}} <br>
                             </p>
                         </div>
@@ -230,7 +199,6 @@
     </div>
 </div>
 
-
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -240,7 +208,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                    <form [formGroup]="Updateinletchallanfrom">
+                <form [formGroup]="Updateinletchallanfrom">
                     <br>
                     <div class="card">
                         <div class="card-body">
@@ -251,7 +219,7 @@
                                     <label for="Customer_Name">Customer Name</label>
                                     <br>
                                     <input class="form-control" formControlName="Customer_Name">
-                                 
+
                                 </div>
 
                                 <div class="col-md-4">
