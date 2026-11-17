@@ -1,1 +1,81 @@
-<p>vendordeleted works!</p>
+<br><br>
+<br> <br>
+<div class="container">
+    <div *ngFor="let h of AllDeletionHistory">
+
+        <h4>
+            Deleted Vendor Data Details
+        </h4>
+
+
+        <p>
+            <strong>Vendor Code :</strong>
+            {{ h.Vendor_Code }}
+        </p>
+
+
+        <p>
+            <strong>Deleted By:</strong>
+            {{ h.Deleted_By_Admin_Name }}
+        </p>
+
+
+        <p>
+            <strong>Deleted Date:</strong>
+            {{ h.Deleted_Date | date:'dd-MM-yyyy hh:mm a' }}
+        </p>
+
+
+        <p>
+            <strong>Reason:</strong>
+            {{ h.Deletion_Reason }}
+        </p>
+       <hr>
+        <h5>Deleted Vendor Data</h5>
+        <div *ngIf="h.Vendor_Data">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <b>Vendor Code : </b>
+                    {{ h.Vendor_Data.Vendor_Code }}
+
+                    <br>
+
+                    <b>Vendor Name : </b>
+                    {{ h.Vendor_Data.Vendor_Name }}
+                    <br>
+                    <b>Vendor Phone No: </b>
+                    {{ h.Vendor_Data.Vendor_Phoneno }}
+                    <br>
+                    <b>Vendor Email: </b>
+                    {{ h.Vendor_Data.Vendor_Email }}
+                    <br>
+
+                    <b>Company Name : </b>
+                    {{ h.Vendor_Data.Vendor_CompanyName }}
+                    <br>
+
+                    <b>Company Address : </b>
+                    {{ h.Vendor_Data.Vendor_CompanyAddress }}
+                    <br>    
+
+                    <b>Company GST No. : </b>
+                    {{ h.Vendor_Data.VendorGST_No }}
+                    <br>
+                </div>
+
+                <div class="col-md-6">
+                    
+                    <b>Added Date :</b>
+                    {{ h.Vendor_Data.Added_Date | date }}
+                    <br>
+                    <b>Updated Date :</b>
+                    {{ h.Vendor_Data.Updated_Date | date}}
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>

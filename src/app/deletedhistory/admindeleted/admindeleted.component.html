@@ -1,1 +1,80 @@
-<p>admindeleted works!</p>
+<br><br>
+<br> <br>
+<div class="container">
+    <div *ngFor="let h of AllDeletionHistory">
+
+        <h4>
+            Deleted Admin Data Details
+        </h4>
+
+
+        <p>
+            <strong>Admin Code :</strong>
+            {{ h.Code }}
+        </p>
+
+
+        <p>
+            <strong>Deleted By:</strong>
+            {{ h.Deleted_By_Admin_Name }}
+        </p>
+
+
+        <p>
+            <strong>Deleted Date:</strong>
+            {{ h.Deleted_Date | date:'dd-MM-yyyy hh:mm a' }}
+        </p>
+
+
+        <p>
+            <strong>Reason:</strong>
+            {{ h.Deletion_Reason }}
+        </p>
+       <hr>
+        <h5>Deleted Admin Data</h5>
+        <div *ngIf="h.Admin_Data">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <b>Admin Code : </b>
+                    {{ h.Admin_Data.Code }}
+                    <br>
+                    <b>Admin Name : </b>
+                    {{ h.Admin_Data.Name }}
+                    <br>
+                    <b> PhoneNo : </b>
+                    {{ h.Admin_Data.PhoneNo }}
+                    <br>
+                    <b> Email : </b>
+                    {{ h.Admin_Data.Email }}
+                    <br>
+                   
+                    <b> Role : </b>
+                    {{ h.Admin_Data.Role }}
+                    <br>
+                  
+                </div>
+
+                <div class="col-md-6">
+                     <b> Username : </b>
+                    {{ h.Admin_Data.Username }}
+                    <br>
+                    <b> Password : </b>
+                    {{ h.Admin_Data.Password }}
+                    <br>
+                    <b>Added Date :</b>
+                    {{ h.Admin_Data.Added_Date | date }}
+                    <br>
+                    <b>Updated Date :</b>
+                    {{ h.Admin_Data.Updated_Date | date}}
+                    <br>
+                      <b> Address : </b>
+                    {{ h.Admin_Data.Address }}
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>

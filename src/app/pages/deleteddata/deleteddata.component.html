@@ -159,10 +159,10 @@
                                 <tbody>
                                     <tr *ngFor=" let Vendorhistory of AllVendorDeletionHistory; let i = index ">
                                         <td> {{ i + 1 }} </td>
-                                        <td> {{ Vendorhistory.VendorDeletion_id }}</td>
-                                        <!-- <i class="fa-regular fa-eye i"
-                                                [routerLink]="['/Home/DeletedInletChallanHistory', Vendorhistory.Deletionchallan_id]"
-                                                title="View a Challan Deleted Details"></i> -->
+                                        <td> {{ Vendorhistory.VendorDeletion_id }}
+                                        <i class="fa-regular fa-eye i"
+                                                [routerLink]="['/Home/DeletedVendorHistory', Vendorhistory.VendorDeletion_id]"
+                                                title="View a Vendor Deleted Details"></i></td>
                                         <td> {{ Vendorhistory.Vendor_Code }} </td>
                                         <td> {{ Vendorhistory.Deleted_By_Admin_Name }} </td>
                                         <td> {{ Vendorhistory.Deletion_Reason }} </td>
@@ -201,9 +201,10 @@
                                     <tr *ngFor=" let CustomerHistory of AllCustomerDeletionHistory; let i = index ">
                                         <td> {{ i + 1 }} </td>
                                         <td> {{ CustomerHistory.CustomerDeletion_id }}
-                                        <i class="fa-regular fa-eye i"
+                                            <i class="fa-regular fa-eye i"
                                                 [routerLink]="['/Home/DeletedCustomerHistory', CustomerHistory.CustomerDeletion_id]"
-                                                title="View a Challan Deleted Details"></i></td>
+                                                title="View a Challan Deleted Details"></i>
+                                        </td>
                                         <td> {{ CustomerHistory.Customer_Code }} </td>
                                         <td> {{ CustomerHistory.Deleted_By_Admin_Name }} </td>
                                         <td> {{ CustomerHistory.Deletion_Reason }} </td>
@@ -235,7 +236,6 @@
                                         <th>Admin Code</th>
                                         <th>Deleted By</th>
                                         <th>Reason</th>
-                                        <th>Data</th>
                                         <th>Deleted Date</th>
                                     </tr>
                                 </thead>
@@ -243,14 +243,14 @@
                                 <tbody>
                                     <tr *ngFor=" let adminHistory of AllAdminDeletionHistory; let i = index ">
                                         <td> {{ i + 1 }} </td>
-                                        <td> {{ adminHistory.AdminDeletion_id }}</td>
-                                        <!-- <i class="fa-regular fa-eye i"
-                                                [routerLink]="['/Home/DeletedInletChallanHistory', Vendorhistory.Deletionchallan_id]"
-                                                title="View a Challan Deleted Details"></i> -->
+                                        <td> {{ adminHistory.AdminDeletion_id }}
+                                            <i class="fa-regular fa-eye i"
+                                                [routerLink]="['/Home/DeletedAdminHistory', adminHistory.AdminDeletion_id]"
+                                                title="View a Admin Deleted Details"></i>
+                                        </td>
                                         <td> {{ adminHistory.Code }} </td>
                                         <td> {{ adminHistory.Deleted_By_Admin_Name }} </td>
                                         <td> {{ adminHistory.Deletion_Reason }} </td>
-                                        <td> {{ adminHistory.Admin_Data }} </td>
                                         <td> {{ adminHistory.Deleted_Date | date :'dd-MM-yyyy hh:mm a' }} </td>
                                     </tr>
                                     <tr *ngIf="AllAdminDeletionHistory.length === 0">
