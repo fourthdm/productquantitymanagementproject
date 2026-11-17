@@ -591,6 +591,7 @@ export class ChallansComponent implements OnInit {
     product.get('SubTotal')?.setValue(subtotal, { emitEvent: false });
     this.calculateVendorGrandTotal();
   }
+
   calculateVendorGrandTotal() {
     let subtotal = 0;
     this.vendoritems.controls.forEach((p: any) => {
@@ -607,6 +608,69 @@ export class ChallansComponent implements OnInit {
       Grand_Total: grand
     });
 
+  }
+
+
+  onProductNameChange(index: number): void {
+    const currentItem = this.vendoritems.at(index);
+
+    const productName = String(
+      currentItem.get('Product_Name')?.value || ''
+    ).trim();
+
+    if (!productName) {
+      currentItem.patchValue({
+        HSN_Code: ''
+      });
+      return;
+    }
+    // First check other products in the current Sales Order.
+    // This also supports repeated product names in the same order.
+    const existingItem = this.vendoritems.controls.find(
+      (vendoritems, itemIndex) =>
+        itemIndex !== index &&
+        String(vendoritems.get('Product_Name')?.value || '')
+          .trim()
+          .toLowerCase() === productName.toLowerCase() &&
+        String(vendoritems.get('HSN_Code')?.value || '').trim() !== ''
+    );
+
+    if (existingItem) {
+      currentItem.patchValue({
+        HSN_Code: existingItem.get('HSN_Code')?.value
+      });
+      return;
+    }
+
+    // Otherwise, search previously saved Sales Orders.
+    this._rest.GetVendorProductHSNByProductName(productName).subscribe({
+      next: (response: any) => {
+        // Ignore the response if the user changed the product
+        // while the API request was in progress.
+        const currentName = String(
+          currentItem.get('Product_Name')?.value || ''
+        ).trim();
+
+        if (
+          currentName.toLowerCase() !== productName.toLowerCase()
+        ) { return;}
+
+        if (response.success && response.found) {
+          currentItem.patchValue({
+            HSN_Code: response.HSN_Code
+          });
+        } else {
+          // New product: user must enter HSN manually.
+          currentItem.patchValue({
+            HSN_Code: ''
+          });
+        }
+      },
+      error: (error: any) => {
+        console.error('Unable to fetch HSN code:', error);
+        alert('Unable to fetch HSN code. Please try again.');
+      }
+    });
   }
 
   VendorAddProduct() {

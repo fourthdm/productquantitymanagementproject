@@ -186,27 +186,27 @@ export class RestService {
     return this._http.get(this.ApiUrl + '/AllSalesOrder');
   }
 
-  HSNCodes(){
+  HSNCodes() {
     return this._http.get(this.ApiUrl + '/HSNCodes');
   }
-  
-  SalesorderByHSNCode(data:any){
+
+  SalesorderByHSNCode(data: any) {
     return this._http.post(this.ApiUrl + '/SalesOrderByHSNCode', data);
   }
 
-  SalesorderByCustomerName(data:any){
+  SalesorderByCustomerName(data: any) {
     return this._http.post(this.ApiUrl + '/SalesOrderByCustomerName', data);
   }
 
-  SalesorderByCompanyname(data:any){
+  SalesorderByCompanyname(data: any) {
     return this._http.post(this.ApiUrl + '/SalesOrderByCompanyName', data);
   }
 
-  SalesOrderByAddedDate(data:any){
+  SalesOrderByAddedDate(data: any) {
     return this._http.post(this.ApiUrl + '/SalesOrderByAdded_Date', data);
   }
 
-  SalesOrderBySalesOrderStatus(data:any){
+  SalesOrderBySalesOrderStatus(data: any) {
     return this._http.post(this.ApiUrl + '/SalesOrderBySales_Order_Status', data);
   }
 
@@ -450,6 +450,10 @@ export class RestService {
     return this._http.get<any>(`${this.ApiUrl}/GetHSNByProductName`, { params: { Product_Name: Product_Name } });
   }
 
+  GetVendorProductHSNByProductName(Product_Name: string) {
+    return this._http.get<any>(`${this.ApiUrl}/VendorProductGetHSNByProductName`, { params: { Product_Name: Product_Name } });
+  }
+
   ExtraProduct() {
     return this._http.get(this.ApiUrl + `/Allproduct_excess_stock`);
   }
@@ -459,9 +463,12 @@ export class RestService {
     return this._http.get<any>(`${this.ApiUrl}/GetProductExtraStock`, { params });
   }
 
-  UpdateInletProductProduction(InletProduct_id: number, payload: any)
-   {
-     return this._http.put<any>(`${this.ApiUrl}/UpdateInletProductProduction/${InletProduct_id}`, payload); 
-    }
+  UpdateInletProductProduction(InletProduct_id: number, payload: any) {
+    return this._http.put<any>(`${this.ApiUrl}/UpdateInletProductProduction/${InletProduct_id}`, payload);
+  }
+
+  UpdateaVendorProductQuantity(data: any) {
+    return this._http.post(this.ApiUrl + '/UpdateVendorChallanReceipt', data);
+  }
 
 }

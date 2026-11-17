@@ -524,9 +524,32 @@
                         <div formArrayName="vendoritems">
                             <div *ngFor="let product of vendoritems.controls; let i=index" [formGroupName]="i">
                                 <div class="row">
+                                  
                                     <div class="col-md-4">
+    <label for="Product_Name">Product Name<sup>*</sup></label>
+
+    <input
+        type="text"
+        class="form-control"
+        placeholder="Product"
+        formControlName="Product_Name"
+        (blur)="onProductNameChange(i)"
+        [ngClass]="{
+            'is-invalid':
+            (submitted || product.get('Product_Name')?.touched) &&
+            product.get('Product_Name')?.invalid
+        }">
+
+    <div class="invalid-feedback"
+        *ngIf="(submitted || product.get('Product_Name')?.touched) &&
+        product.get('Product_Name')?.errors?.['required']">
+        Product Name is required
+    </div>
+</div>
+
+                                    <!-- <div class="col-md-4">
                                         <label for="Product_Name">Product Name<sup>*</sup></label>
-                                        <input class="form-control" placeholder="Product" formControlName="Product_Name"
+                                        <input class="form-control" placeholder="Product" formControlName="Product_Name" (click)="onProductNameChange(i)"
                                             [ngClass]="{'is-invalid': (submitted || product.get('Product_Name')?.touched) &&
                                             product.get('Product_Name')?.invalid }">
                                         <div class="invalid-feedback" *ngIf="(submitted || product.get('Product_Name')?.touched) &&
@@ -534,7 +557,7 @@
                                             Product Name is required
                                         </div>
                                         <br>
-                                    </div>
+                                    </div> -->
                                     <br>
                                     <div class="col-md-4">
                                         <label for="HSN_Code">HSN_Code<sup>*</sup></label>
