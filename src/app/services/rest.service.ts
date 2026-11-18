@@ -471,4 +471,13 @@ export class RestService {
     return this._http.post(this.ApiUrl + '/UpdateVendorChallanReceipt', data);
   }
 
+
+  GetVendorChallanProducts(VendorChallan_id: number) {
+    return this._http.get(`${this.ApiUrl}/GetVendorChallanProducts/${VendorChallan_id}`);
+  }
+
+  UpdateVendorChallanReceipt(data: any) {
+    return this._http.post( `${this.ApiUrl}/UpdateVendorChallanReceipt`, data);
+  }
+
 }

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { RestService } from 'src/app/services/rest.service';
 import * as XLSX from 'xlsx';
 
@@ -24,6 +25,7 @@ export class OutwardchallanComponent {
   AllVendorChallan: any[] = [];
 
   UpdateVendorchallanform: FormGroup;
+  UpdateProductform!: FormGroup;
   pro: any;
 
   constructor(private _rest: RestService, private fb: FormBuilder, private _activatedroute: ActivatedRoute) {
@@ -54,9 +56,14 @@ export class OutwardchallanComponent {
       vendoritems: this.fb.array([
         this.createProduct()
       ])
-    })
+    });
+
   }
 
+
+  get vendorproducts(): FormArray {
+    return this.UpdateProductform.get('vendorproducts') as FormArray;
+  }
   liked: boolean = false;
 
   Show() {
@@ -66,6 +73,11 @@ export class OutwardchallanComponent {
   ngOnInit(): void {
     this.AllchallanDetails();
     this.GetAllVendor();
+
+    this.UpdateProductform = this.fb.group({
+      vendorproducts: this.fb.array([])
+    });
+
   }
 
   GetAllVendor() {
@@ -181,25 +193,6 @@ export class OutwardchallanComponent {
     });
   }
 
-  // Update() {
-  //   if (this.UpdateVendorchallanform.invalid) {
-  //     alert('Please fill required fields');
-  //     return;
-  //   }
-  //   const VendorChallan_id = this.UpdateVendorchallanform.value.VendorChallan_id;
-  //   const body = this.UpdateVendorchallanform.getRawValue();
-  //   this._rest.UpdateVendorChallan(VendorChallan_id, body).subscribe({
-  //     next: (res: any) => {
-  //       alert(res.message);
-  //       this.AllchallanDetails();
-  //     },
-  //     error: err => {
-  //       console.log(err);
-  //       alert(err.error?.message || 'Update failed');
-  //     }
-  //   });
-  // }
-
   Update() {
     if (this.UpdateVendorchallanform.invalid) {
       this.UpdateVendorchallanform.markAllAsTouched();
@@ -263,29 +256,6 @@ export class OutwardchallanComponent {
   adminPassword = '';
   deletionReason = '';
   isDeleting: boolean = false;
-
-  // openDeleteModal(id: number) {
-  //   this.selectedchallanId = id;
-  // }
-
-  // DeleteChallan() {
-  //   this._rest.DeleteVendorChallan(
-  //     this.selectedchallanId,
-  //     this.adminPassword,
-  //     this.deletionReason
-  //   ).subscribe({
-  //     next: (res: any) => {
-  //       alert(res.message);
-  //       if (res.success) {
-  //         this.AllchallanDetails();
-  //         this.adminPassword = '';
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  //     }
-  //   });
-  // }
 
   openDeleteModal(id: number) {
     this.selectedchallanId = id;
@@ -511,181 +481,6 @@ export class OutwardchallanComponent {
     });
   }
 
-  // printPdf(VendorChallan_id: any) {
-  //   this._rest.GetVendorChallanPDF(VendorChallan_id)
-  //     .subscribe((file: Blob) => {
-  //       const url = window.URL.createObjectURL(file);
-  //       const win = window.open('', '_blank');
-
-  //       if (win) {
-  //         win.document.write(
-  //           `<iframe src="${url}" style="width:100%;height:100%;border:none;"></iframe>`
-  //         );
-
-  //         setTimeout(() => {
-  //           win.print();
-  //         }, 800);
-
-  //         URL.revokeObjectURL(url);
-  //       }
-  //     });
-  // }
-
-  // exportexcel(): void {
-
-  //   const data: any[][] = [];
-  //   // Header
-  //   data.push([
-  //     'Sr No',
-  //     'Vendor Challan Code',
-  //     'Vendor_Name',
-  //     'Company_Name',
-  //     'Company_Address',
-  //     'GST_No',
-  //     'Vendor_Phoneno',
-  //     'Vendor_Email',
-  //     'Sub_Total',
-  //     'Total_Amount',
-  //     'CGST_amount',
-  //     'SGST_amount',
-  //     'Grand_Total',
-  //     'Mode_of_Transport',
-  //     'Transporter_Name',
-  //     'Vehicle_Number',
-  //     'Remark',
-  //     'Work_Status',
-  //     'Delivery_Status',
-  //     'Challan_Status',
-  //     'Added_Date',
-  //     'Updated_Date',
-
-  //     'Product',
-  //     'HSN_Code',
-  //     'Qty',
-  //     'Rate',
-  //     'Subtotal',
-
-  //   ]);
-
-  //   const merges: XLSX.Range[] = [];
-
-  //   let row = 1;
-
-  //   this.AllVendorChallan.forEach((challan: any, index: number) => {
-
-  //     const startRow = row;
-
-  //     (challan.items || []).forEach((item: any, i: number) => {
-
-  //       data.push([
-  //         i === 0 ? index + 1 : '',
-  //         i === 0 ? challan.VendorChallan_Code : '',
-  //         i === 0 ? challan.Vendor_Name : '',
-  //         i === 0 ? challan.Vendor_CompanyName : '',
-  //         i === 0 ? challan.Vendor_CompanyAddress : '',
-  //         i === 0 ? challan.VendorGST_No : '',
-  //         i === 0 ? challan.Vendor_Phoneno : '',
-  //         i === 0 ? challan.Vendor_Email : '',
-  //         i === 0 ? challan.Sub_Total : '',
-  //         i === 0 ? challan.Total_Amount : '',
-  //         i === 0 ? challan.CGST_amount : '',
-  //         i === 0 ? challan.SGST_amount : '',
-  //         i === 0 ? challan.Grand_Total : '',
-  //         i === 0 ? challan.Mode_of_Transport : '',
-  //         i === 0 ? challan.Transporter_Name : '',
-  //         i === 0 ? challan.Vehicle_Number : '',
-  //         i === 0 ? challan.Remark : '',
-  //         i === 0 ? challan.Product_Status : '',
-  //         i === 0 ? challan.Delivery_Status : '',
-  //         i === 0 ? challan.Challan_Status : '',
-  //         i === 0 ? challan.Added_Date : '',
-  //         i === 0 ? challan.Updated_Date : '',
-
-  //         item.Product_Name,
-  //         item.HSN_Code,
-  //         item.Product_Quantity,
-  //         item.Rate,
-  //         item.SubTotal,
-  //         item.Operation_Name,
-  //         item.OperationRate
-  //       ]);
-
-  //       row++;
-  //     });
-
-  //     // challan.items.forEach((item: any, i: number) => {
-  //     //   challan.items.forEach((operations: any, i: number) => {
-  //     //     data.push([
-  //     //       i === 0 ? index + 1 : '',
-  //     //       i === 0 ? challan.VendorChallan_Code : '',
-  //     //       i === 0 ? challan.Vendor_Name : '',
-  //     //       i === 0 ? challan.Vendor_CompanyName : '',
-  //     //       i === 0 ? challan.Vendor_CompanyAddress : '',
-  //     //       i === 0 ? challan.VendorGST_No : '',
-  //     //       i === 0 ? challan.Vendor_Phoneno : '',
-  //     //       i === 0 ? challan.Vendor_Email : '',
-  //     //       i === 0 ? challan.Sub_Total : '',
-  //     //       i === 0 ? challan.Total_Amount : '',
-  //     //       i === 0 ? challan.Discount_Amount : '',
-  //     //       i === 0 ? challan.CGST_amount : '',
-  //     //       i === 0 ? challan.SGST_amount : '',
-  //     //       i === 0 ? challan.Grand_Total : '',
-  //     //       i === 0 ? challan.Mode_of_Transport : '',
-  //     //       i === 0 ? challan.Transporter_Name : '',
-  //     //       i === 0 ? challan.Vehicle_Number : '',
-  //     //       i === 0 ? challan.Remark : '',
-  //     //       i === 0 ? challan.Product_Status : '',
-  //     //       i === 0 ? challan.Delivery_Status : '',
-  //     //       i === 0 ? challan.Challan_Status : '',
-  //     //       i === 0 ? challan.Added_Date : '',
-  //     //       i === 0 ? challan.Updated_Date : '',
-
-  //     //       item.Product_Name,
-  //     //       item.HSN_Code,
-  //     //       // item.Operation_Perform,
-  //     //       item.Product_Quantity,
-  //     //       item.Rate,
-  //     //       item.SubTotal,
-
-  //     //       operations.Operation_Name,
-  //     //       operations.Rate
-  //     //     ]);
-  //     //     row++;
-  //     //   });
-  //     // });
-
-  //     const endRow = row - 21;
-
-  //     if (endRow > startRow) {
-
-  //       for (let c = 0; c <= 22; c++) {
-  //         merges.push({
-  //           s: { r: startRow, c },
-  //           e: { r: endRow, c }
-  //         });
-  //       }
-
-  //     }
-  //     // if (endRow > startRow) {
-  //     //   merges.push({ s: { r: startRow, c: 0 }, e: { r: endRow, c: 0 } });
-  //     //   merges.push({ s: { r: startRow, c: 1 }, e: { r: endRow, c: 1 } });
-  //     //   merges.push({ s: { r: startRow, c: 2 }, e: { r: endRow, c: 2 } });
-  //     // }
-
-  //   });
-
-  //   const worksheet = XLSX.utils.aoa_to_sheet(data);
-
-  //   worksheet['!merges'] = merges;
-
-  //   const workbook = XLSX.utils.book_new();
-
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'All Vendor Challan');
-
-  //   XLSX.writeFile(workbook, 'AllVendorChallan.xlsx');
-
-  // }
-
   exportexcel(): void {
 
     const data: any[][] = [];
@@ -854,65 +649,11 @@ export class OutwardchallanComponent {
           });
         }
       }
-      // if (endRow > startRow) {
-
-      //   // for (let c = 0; c <= 20; c++) {
-
-      //   //   merges.push({
-      //   //     s: { r: startRow, c: c },
-      //   //     e: { r: endRow, c: c }
-      //   //   });
-
-      //   // }
-
-      //   for (let c = 21; c <= 25; c++) {
-
-      //     merges.push({
-      //       s: { r: productStartRow, c },
-      //       e: { r: productEndRow, c }
-      //     });
-
-      //   }
-
-      // }
-
     });
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
 
     worksheet['!merges'] = merges;
-
-    // worksheet['!cols'] = [
-    //   { wch: 8 },
-    //   { wch: 20 },
-    //   { wch: 20 },
-    //   { wch: 25 },
-    //   { wch: 30 },
-    //   { wch: 18 },
-    //   { wch: 15 },
-    //   { wch: 25 },
-    //   { wch: 12 },
-    //   { wch: 12 },
-    //   { wch: 12 },
-    //   { wch: 15 },
-    //   { wch: 18 },
-    //   { wch: 20 },
-    //   { wch: 18 },
-    //   { wch: 25 },
-    //   { wch: 18 },
-    //   { wch: 18 },
-    //   { wch: 18 },
-    //   { wch: 18 },
-    //   { wch: 18 },
-    //   { wch: 22 },
-    //   { wch: 15 },
-    //   { wch: 12 },
-    //   { wch: 12 },
-    //   { wch: 15 },
-    //   { wch: 20 },
-    //   { wch: 15 }
-    // ];
-
     const workbook = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Vendor Challan');
@@ -920,6 +661,176 @@ export class OutwardchallanComponent {
     XLSX.writeFile(workbook, 'Vendor_Challan_Report.xlsx');
 
   }
+
+  createVendorProductItem(product: any): FormGroup {
+
+    return this.fb.group({
+
+      VendorProduct_id: [product.VendorProduct_id],
+
+      Product_Name: [product.Product_Name],
+
+      HSN_Code: [product.HSN_Code],
+
+      Product_Quantity: [product.Product_Quantity],
+
+      Received_Quantity: [
+        product.Received_Quantity || 0,
+        [Validators.required, Validators.min(0)]
+      ],
+
+      Pending_Quantity: [product.Pending_Quantity || 0],
+
+      Pending_Reason: [product.Pending_Reason || '']
+
+    });
+
+  }
+
+  calculatePending(index: number) {
+    const product = this.vendorproducts.at(index);
+    const sentQty = Number(
+      product.get('Product_Quantity')?.value || 0
+    );
+    const receivedQty = Number(
+      product.get('Received_Quantity')?.value || 0
+    );
+    const pendingQty = sentQty - receivedQty;
+    product.get('Pending_Quantity')?.setValue(
+      pendingQty >= 0 ? pendingQty : 0
+    );
+  }
+
+  GetVendorChallanProducts(VendorChallan_id: number) {
+    this.vendorproducts.clear();
+    this._rest.GetVendorChallanProducts(VendorChallan_id).subscribe({
+      next: (res: any) => {
+        if (res && res.length > 0) {
+          res.forEach((product: any) => {
+            this.vendorproducts.push(
+              this.createVendorProductItem(product)
+            );
+          });
+
+        } else {
+          alert('No products found');
+        }
+      },
+
+      error: (err: any) => {
+        console.error(err);
+        alert('Unable to fetch products');
+      }
+    });
+  }
+
+  UpdateProducts() {
+
+  if (this.UpdateProductform.invalid) {
+    alert('Please enter valid product quantities');
+    return;
+  }
+
+  const requests = this.vendorproducts.controls.map((product: any) => {
+
+    const receivedQty = Number(
+      product.get('Received_Quantity')?.value
+    );
+
+    const sentQty = Number(
+      product.get('Product_Quantity')?.value
+    );
+
+    const pendingQty = sentQty - receivedQty;
+
+    const data = {
+      VendorProduct_id: Number(
+        product.get('VendorProduct_id')?.value
+      ),
+      Received_Quantity: receivedQty,
+      Pending_Reason: product.get('Pending_Reason')?.value || '',
+      Pending_Quantity: pendingQty
+    };
+    
+    console.log('Updating Product:', data);
+    return this._rest.UpdateVendorChallanReceipt(data);
+  });
+
+  forkJoin(requests).subscribe({
+    next: (res: any) => {
+      alert('Product quantities updated successfully!');
+      this.vendorproducts.clear();
+    },
+
+    error: (err: any) => {
+      console.error('Update Error:', err);
+      console.error('Backend Response:', err.error);
+      alert(err.error?.message || 'Unable to update product quantities');
+    }
+  });
+}
+
+  // UpdateProducts() {
+  //   if (this.UpdateProductform.invalid) {
+  //     alert('Please enter valid product quantities');
+  //     return;
+  //   }
+  //   const products = this.vendorproducts.getRawValue();
+  //   const invalidProduct = products.some((p: any) => {
+  //     return (
+  //       Number(p.Received_Quantity) < 0 ||
+  //       Number(p.Received_Quantity) >
+  //       Number(p.Product_Quantity) ||
+  //       (
+  //         Number(p.Pending_Quantity) > 0 &&
+  //         !p.Pending_Reason?.trim()
+  //       )
+  //     );
+
+  //   });
+
+  //   if (invalidProduct) {
+  //     alert('Please check received quantity and pending reason');
+  //     return;
+  //   }
+
+  //   const requests = products.map((p: any) => {
+
+  //     return this._rest.UpdateVendorChallanReceipt({
+  //       VendorProduct_id: p.VendorProduct_id,
+  //       Received_Quantity: Number(p.Received_Quantity),
+  //       Pending_Reason: p.Pending_Reason
+  //     });
+
+  //   });
+
+  //   if (requests.length === 0) {
+  //     return;
+  //   }
+
+  //   forkJoin(requests).subscribe({
+
+  //     next: (res: any) => {
+
+  //       alert('All Vendor Products Updated Successfully!');
+
+  //       this.vendorproducts.clear();
+
+  //       this.AllchallanDetails(); // Reload your challan list
+
+  //     },
+
+  //     error: (err: any) => {
+
+  //       console.error(err);
+
+  //       alert('Unable to update Vendor Product Quantity');
+
+  //     }
+
+  //   });
+
+  // }
 
 }
 

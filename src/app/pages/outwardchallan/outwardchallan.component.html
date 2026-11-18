@@ -96,7 +96,6 @@
     </div>
     <br>
     <div class="card externalcard">
-
         <div class="text-end">
             <button class="btn btn-success" [routerLink]="['/Home/Vendorreceipts']">Vendor Challan Receipts</button>
         </div>
@@ -118,8 +117,7 @@
                                 <i class="fa-solid fa-trash-can text-danger i"></i>
                             </a>
                             <i class="fa-solid fa-pencil i" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                               (click)="editRequirement(Ch.VendorChallan_id)"
-                                title="Update a Vendor Challan"></i>
+                                (click)="editRequirement(Ch.VendorChallan_id)" title="Update a Vendor Challan"></i>
 
                             <i class="fa-solid fa-print i" (click)="printPdf(Ch.VendorChallan_id)"
                                 title="Print a Vendor Challan"></i>
@@ -128,19 +126,8 @@
                                 [routerLink]="['/Home/OutwardChallanData', Ch.VendorChallan_id]"
                                 title="View a Vendor Challan Details"></i>
 
-                            <button type="button" class="btn btn-sm btn-primary"  data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                [routerLink]="['/Home/Vendorreceipts', Ch.VendorChallan_id]">
-                                <i class="bi bi-box-seam"></i>
-                                Product's Update
-                            </button>
 
-                            <!-- <button type="button" class="btn btn-sm btn-primary"
-                                [routerLink]="['/Home/Vendorreceipts', Ch.VendorChallan_id]">
-                                <i class="bi bi-box-seam"></i>
-                                Receive Product
-                            </button> -->
-
-                            <br><br>
+<br>
                             <p>
                                 <b>Challan Code :</b> {{Ch.VendorChallan_Code}} <br>
                                 <b>Vendor Name :</b> {{Ch.Vendor_Name}} <br>
@@ -186,6 +173,14 @@
 
                                 </span> {{Ch.Challan_Status}} <br>
                             </p>
+
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleModalUpdateproductquantity"
+                                (click)="GetVendorChallanProducts(Ch.VendorChallan_id)">
+                                <i class="bi bi-box-seam"></i>
+                               <small> Verify & Update Received Product Quantity</small>
+                            </button>
+
                         </div>
                     </div>
                     <br>
@@ -201,6 +196,68 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="exampleModalUpdateproductquantity" tabindex="-1"
+    aria-labelledby="UpdateproductquantityexampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="UpdateproductquantityexampleModalLabel">Vendor Product Verification</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="UpdateProductform">
+                    <div formArrayName="vendorproducts">
+                        <div *ngFor="let product of vendorproducts.controls; let i=index" [formGroupName]="i"
+                            class="card mb-3">
+                            <div class="card-header">
+                                <h5>{{product.get('Product_Name')?.value}}</h5>
+                            </div>
+                            <div class="card-body">
+                                <input type="hidden" formControlName="VendorProduct_id">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label>Product Name</label>
+                                        <input class="form-control" formControlName="Product_Name" readonly>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Sent Quantity</label>
+                                        <input type="number" class="form-control" formControlName="Product_Quantity"
+                                            readonly>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Received Quantity</label>
+                                        <input type="number" class="form-control" formControlName="Received_Quantity"
+                                            (input)="calculatePending(i)">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Pending Quantity</label>
+                                        <input type="number" class="form-control" formControlName="Pending_Quantity"
+                                            readonly>
+                                    </div>
+                                    <div class="col-md-8 mb-3">
+                                        <label>Pending Reason</label>
+                                        <textarea class="form-control" formControlName="Pending_Reason"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-primary"
+                            [disabled]="vendorproducts.length === 0 || UpdateProductform.invalid"
+                            (click)="UpdateProducts()">
+                            Update Product Quantity
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -586,36 +643,3 @@
         </div>
     </div>
 </div>
-
-
-
-<!-- <div class="modal fade" id="deleteVendorModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Delete Vendor Challan</h5>
-            </div>
-            <div class="modal-body">
-                <label>Enter Admin Password</label>
-                <div class="input-group mb-3">
-                    <input [type]="liked ? 'password' : 'adminPassword'" type="Password" class="form-control"
-                        [(ngModel)]="adminPassword" placeholder="Enter Password" required>
-                    <span class="btn btn-outline-secondary" type="" [ngClass]="{
-                                                        'fa-eye-slash': !liked,
-                                                        'fa-eye': liked }" (click)="Show()" id="button-addon2"><i
-                            class="fa-solid fa-eye-slash"></i>
-                    </span>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">
-                    Cancel
-                </button>
-                <button class="btn btn-danger" (click)="DeleteChallan()">
-                    Delete
-                </button>
-            </div>
-        </div>
-    </div>
-</div> -->
