@@ -30,12 +30,6 @@ export class RestService {
     return this._http.get(this.ApiUrl + '/AllAdminData');
   }
 
-  // DeleteAdmin(Admin_id: number, Password: string) {
-  //   this._State.CheckToken();
-  //   const headers = new HttpHeaders({ 'x-access-token': this._State.token });
-  //   return this._http.post(this.ApiUrl + "/DeleteAdmin/" + Admin_id, { Password }, { headers });
-  // }
-
   TotalNumberofAdmin() {
     return this._http.get(this.ApiUrl + '/NumberofAdmin');
   }
@@ -53,12 +47,6 @@ export class RestService {
     const headers = new HttpHeaders({ 'x-access-token': this._State.token });
     return this._http.post(this.ApiUrl + "/DeleteAdminwithReason/" + Admin_id, { Password, Deletion_Reason }, { headers });
   }
-  // DeleteCustomer(Customer_id: number, Password: string) {
-  //   this._State.CheckToken();
-  //   const headers = new HttpHeaders({ 'x-access-token': this._State.token });
-  //   return this._http.post(this.ApiUrl + "/Deletecustomer/" + Customer_id, { Password }, { headers });
-  // }
-
 
   AdminDeletionHistory() {
     this._State.CheckToken();
@@ -83,23 +71,18 @@ export class RestService {
   UpdateCustomer(data: any) {
     return this._http.put(this.ApiUrl + '/UpdateCustomer/' + data.Customer_id, data);
   }
+
   DeleteCustomer(Customer_id: number, Password: string, Deletion_Reason: string) {
     this._State.CheckToken();
     const headers = new HttpHeaders({ 'x-access-token': this._State.token });
     return this._http.post(this.ApiUrl + "/DeleteCustomerwithReason/" + Customer_id, { Password, Deletion_Reason }, { headers });
   }
-  // DeleteCustomer(Customer_id: number, Password: string) {
-  //   this._State.CheckToken();
-  //   const headers = new HttpHeaders({ 'x-access-token': this._State.token });
-  //   return this._http.post(this.ApiUrl + "/Deletecustomer/" + Customer_id, { Password }, { headers });
-  // }
 
   CustomerDeletionHistory() {
     this._State.CheckToken();
     const headers = new HttpHeaders({ 'x-access-token': this._State.token });
     return this._http.get<any>(this.ApiUrl + "/GetCustomerDeletionHistory", { headers });
   }
-
 
   SearchCustomername(data: any) {
     return this._http.post(this.ApiUrl + '/SearchbyCustomerName', data);
@@ -120,9 +103,7 @@ export class RestService {
   DatabetweenDate(data: any) {
     return this._http.post(this.ApiUrl + '/DatabetweenDate', data);
   }
-
   //Vendor API
-
   AddVendor(data: any) {
     return this._http.post(this.ApiUrl + '/AddVendor', data);
   }
@@ -138,12 +119,6 @@ export class RestService {
   UpdateVendor(data: any) {
     return this._http.put(this.ApiUrl + '/UpdateVendor/' + data.Vendor_id, data);
   }
-
-  // DeleteVendor(Vendor_id: number, Password: string) {
-  //   this._State.CheckToken();
-  //   const headers = new HttpHeaders({ 'x-access-token': this._State.token });
-  //   return this._http.post(this.ApiUrl + "/Deletevendor/" + Vendor_id, { Password }, { headers });
-  // }
 
   DeleteVendor(Vendor_id: number, Password: string, Deletion_Reason: string) {
     this._State.CheckToken();
@@ -291,6 +266,10 @@ export class RestService {
 
   DatabyDeliveryStatus(data: any) {
     return this._http.post(this.ApiUrl + '/ChallanbyDeliveryStatus', data);
+  }
+
+  InletchallanDatabySaleOrderNumber(data:any){
+    return this._http.post(this.ApiUrl + '/ChallanbySalesorder',data);
   }
 
   GetInletHistory(Challan_id: any) {
@@ -470,7 +449,6 @@ export class RestService {
   UpdateaVendorProductQuantity(data: any) {
     return this._http.post(this.ApiUrl + '/UpdateVendorChallanReceipt', data);
   }
-
 
   GetVendorChallanProducts(VendorChallan_id: number) {
     return this._http.get(`${this.ApiUrl}/GetVendorChallanProducts/${VendorChallan_id}`);

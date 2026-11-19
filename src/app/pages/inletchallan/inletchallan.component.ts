@@ -18,8 +18,11 @@ export class InletchallanComponent {
   @Input() Work_Status: any;
   @Input() Challan_Status: any;
   @Input() Added_Date: any;
+  @Input() Sales_Order_Number: any;
 
   AllCustomerData: any[] = [];
+
+  AllSalesOrderData : any[]=[];
 
   AllChallan: any[] = [];
   Updateinletchallanfrom: FormGroup;
@@ -58,6 +61,16 @@ export class InletchallanComponent {
   ngOnInit(): void {
     this.AllchallanDetails();
     this.GetAllCustomer();
+    this.AllSalesOrderDetails();
+  }
+
+  AllSalesOrderDetails() {
+    this._rest.AllSalesOrders().subscribe((data: any) => {
+      console.log(data);
+      this.AllSalesOrderData = data.data;
+    }, (err: any) => {
+      console.log(err);
+    });
   }
 
   liked: boolean = false;
@@ -106,18 +119,18 @@ export class InletchallanComponent {
       Product_id: [product?.Product_id ?? null],
       Product_Name: [product?.Product_Name ?? '', Validators.required],
       HSN_Code: [product?.HSN_Code ?? ''],
-      Product_Quantity: [quantity,[Validators.required, Validators.min(1)] ],
-      Ordered_Quantity: [Number(product?.Ordered_Quantity ?? quantity),[Validators.required, Validators.min(1)]],
+      Product_Quantity: [quantity, [Validators.required, Validators.min(1)]],
+      Ordered_Quantity: [Number(product?.Ordered_Quantity ?? quantity), [Validators.required, Validators.min(1)]],
       Available_Extra_Stock: [Number(product?.Available_Extra_Stock ?? 0)],
       Stock_Used: [Number(product?.Stock_Used ?? 0)],
-      Manufacturing_Required: [ Number(product?.Manufacturing_Required ?? quantity)],
-      Produced_Quantity: [Number(product?.Produced_Quantity ?? 0),[Validators.min(0)]],
-      Damaged_Quantity: [Number(product?.Damaged_Quantity ?? 0),[Validators.min(0)]],
+      Manufacturing_Required: [Number(product?.Manufacturing_Required ?? quantity)],
+      Produced_Quantity: [Number(product?.Produced_Quantity ?? 0), [Validators.min(0)]],
+      Damaged_Quantity: [Number(product?.Damaged_Quantity ?? 0), [Validators.min(0)]],
       Faulty_Quantity: [Number(product?.Faulty_Quantity ?? 0), [Validators.min(0)]],
       Good_Quantity: [Number(product?.Good_Quantity ?? 0)],
       Extra_Quantity: [Number(product?.Extra_Quantity ?? 0)],
-      ExtraStock_Posted_Quantity: [Number(product?.ExtraStock_Posted_Quantity ?? 0) ],
-      Rate: [  rate,[Validators.required, Validators.min(0)]  ],
+      ExtraStock_Posted_Quantity: [Number(product?.ExtraStock_Posted_Quantity ?? 0)],
+      Rate: [rate, [Validators.required, Validators.min(0)]],
       SubTotal: [{ value: quantity * rate, disabled: true }]
     });
   }
@@ -135,7 +148,7 @@ export class InletchallanComponent {
   }
 
   Selectedchallan: any = null;
-  
+
 
   editRequirement(Challan_id: any) {
     const data = this.AllChallan.find(r => r.Challan_id === Challan_id);
@@ -362,6 +375,20 @@ export class InletchallanComponent {
     }, (err: any) => {
       console.log(err);
     });
+  }
+
+  DatabySalesorderNumber() {
+    this._rest.InletchallanDatabySaleOrderNumber({ Sales_Order_Number: this.Sales_Order_Number }).subscribe((data: any) => {
+      if (data && data.data && data.data.length > 0) {
+        console.log(data);
+        this.AllChallan = data.data;
+      } else {
+        this.AllChallan = [];
+      }
+      this.Company_Name = '';
+    }, (err: any) => {
+      console.log(err);
+    })
   }
 
   exportexcel(): void {

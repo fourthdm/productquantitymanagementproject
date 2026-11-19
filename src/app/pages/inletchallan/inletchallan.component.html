@@ -18,6 +18,19 @@
         </div>
         <br>
         <div class="col-md-4">
+            <label for="Sales_Order_Number"> <b>Select Sales Order Number.</b> <br>
+                <select name="Sales_Order_Number" id="Sales_Order_Number" [(ngModel)]="Sales_Order_Number" class="form-select"
+                    placeholder="Select Sales_Order_Number" aria-label="Multiple select example">
+                    <option *ngFor="let b of AllSalesOrderData" [value]="b.Sales_Order_Number">
+                        {{Sales_Order_Number}}</option>
+                </select>
+            </label>
+            <button style="margin-left: 3%;" class="btn btn-success" (click)="DatabySalesorderNumber()">Search</button>
+            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data"><i
+                    class="fa-solid fa-arrows-rotate"></i></button><br>
+        </div>
+        <br>
+        <div class="col-md-4">
             <label for="Company_Name"> <b>Select Company Name .</b> <br>
                 <select name="Company_Name" id="Company_Name" [(ngModel)]="Company_Name" class="form-select"
                     placeholder="Select Company Name" aria-label="Multiple select example">

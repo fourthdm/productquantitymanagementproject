@@ -1,3 +1,7 @@
+.mobileview {
+    display: none;
+}
+
 .app {
     background-image: url('/assets/background.png');
     background-color: rgba(72, 70, 182);
@@ -60,13 +64,15 @@
 
 .left-content h1 {
     font-size: 45px;
-    font-weight: 700; font-family: 'CustomFont';
+    font-weight: 700;
+    font-family: 'CustomFont';
 }
 
 .left-content p {
     margin-top: 20px;
     font-size: 22px;
-    line-height: 35px; font-family: 'CustomFont';
+    line-height: 35px;
+    font-family: 'CustomFont';
 }
 
 /* RIGHT */
@@ -94,12 +100,14 @@
 .subtitle {
     text-align: center;
     color: gray;
-    margin-bottom: 40px; font-family: 'CustomFont';
+    margin-bottom: 40px;
+    font-family: 'CustomFont';
 }
 
 label {
     font-weight: 600;
-    margin-bottom: 8px; font-family: 'CustomFont';
+    margin-bottom: 8px;
+    font-family: 'CustomFont';
 }
 
 .form-control {
@@ -183,6 +191,28 @@ label {
 
 @media(max-width:991px) {
 
+    .mobileview::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, .08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, .08) 1px, transparent 1px);
+        background-size: 80px 80px;
+        opacity: .4;
+    }
+
+    .mobileview {
+        background: linear-gradient(180deg, #4746B6, #4746B6);
+        height: 100vh;
+        padding: 20px;
+        display: block;
+    }
+
+    .laptopview {
+        display: none;
+    }
+
     .left-panel {
         display: none;
     }
@@ -192,9 +222,10 @@ label {
     }
 
     .login-card {
+        margin-top: 12%;
         width: 100%;
         max-width: 450px;
-        padding: 30px;
+        padding: 30px;  
     }
 }
 

@@ -125,9 +125,7 @@
                             <i class="fa-regular fa-eye i"
                                 [routerLink]="['/Home/OutwardChallanData', Ch.VendorChallan_id]"
                                 title="View a Vendor Challan Details"></i>
-
-
-<br>
+                            <br>
                             <p>
                                 <b>Challan Code :</b> {{Ch.VendorChallan_Code}} <br>
                                 <b>Vendor Name :</b> {{Ch.Vendor_Name}} <br>
@@ -174,11 +172,11 @@
                                 </span> {{Ch.Challan_Status}} <br>
                             </p>
 
-                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
                                 data-bs-target="#exampleModalUpdateproductquantity"
                                 (click)="GetVendorChallanProducts(Ch.VendorChallan_id)">
                                 <i class="bi bi-box-seam"></i>
-                               <small> Verify & Update Received Product Quantity</small>
+                                 Verify & Update Received Product Quantity
                             </button>
 
                         </div>
@@ -202,7 +200,8 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="UpdateproductquantityexampleModalLabel">Vendor Product Verification</h1>
+                <h1 class="modal-title fs-5" id="UpdateproductquantityexampleModalLabel">Vendor Product Verification
+                </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

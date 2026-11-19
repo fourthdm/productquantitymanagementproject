@@ -725,112 +725,43 @@ export class OutwardchallanComponent {
   }
 
   UpdateProducts() {
-
-  if (this.UpdateProductform.invalid) {
-    alert('Please enter valid product quantities');
-    return;
-  }
-
-  const requests = this.vendorproducts.controls.map((product: any) => {
-
-    const receivedQty = Number(
-      product.get('Received_Quantity')?.value
-    );
-
-    const sentQty = Number(
-      product.get('Product_Quantity')?.value
-    );
-
-    const pendingQty = sentQty - receivedQty;
-
-    const data = {
-      VendorProduct_id: Number(
-        product.get('VendorProduct_id')?.value
-      ),
-      Received_Quantity: receivedQty,
-      Pending_Reason: product.get('Pending_Reason')?.value || '',
-      Pending_Quantity: pendingQty
-    };
-    
-    console.log('Updating Product:', data);
-    return this._rest.UpdateVendorChallanReceipt(data);
-  });
-
-  forkJoin(requests).subscribe({
-    next: (res: any) => {
-      alert('Product quantities updated successfully!');
-      this.vendorproducts.clear();
-    },
-
-    error: (err: any) => {
-      console.error('Update Error:', err);
-      console.error('Backend Response:', err.error);
-      alert(err.error?.message || 'Unable to update product quantities');
+    if (this.UpdateProductform.invalid) {
+      alert('Please enter valid product quantities');
+      return;
     }
-  });
+    const requests = this.vendorproducts.controls.map((product: any) => {
+      const receivedQty = Number(
+        product.get('Received_Quantity')?.value
+      );
+      const sentQty = Number(
+        product.get('Product_Quantity')?.value
+      );
+      const pendingQty = sentQty - receivedQty;
+
+      const data = {
+        VendorProduct_id: Number(
+          product.get('VendorProduct_id')?.value
+        ),
+        Received_Quantity: receivedQty,
+        Pending_Reason: product.get('Pending_Reason')?.value || '',
+        Pending_Quantity: pendingQty
+      };
+
+      console.log('Updating Product:', data);
+      return this._rest.UpdateVendorChallanReceipt(data);
+    });
+
+    forkJoin(requests).subscribe({
+      next: (res: any) => {
+        alert('Product quantities updated successfully!');
+        this.vendorproducts.clear();
+      },
+
+      error: (err: any) => {
+        console.error('Update Error:', err);
+        console.error('Backend Response:', err.error);
+        alert(err.error?.message || 'Unable to update product quantities');
+      }
+    });
+  }
 }
-
-  // UpdateProducts() {
-  //   if (this.UpdateProductform.invalid) {
-  //     alert('Please enter valid product quantities');
-  //     return;
-  //   }
-  //   const products = this.vendorproducts.getRawValue();
-  //   const invalidProduct = products.some((p: any) => {
-  //     return (
-  //       Number(p.Received_Quantity) < 0 ||
-  //       Number(p.Received_Quantity) >
-  //       Number(p.Product_Quantity) ||
-  //       (
-  //         Number(p.Pending_Quantity) > 0 &&
-  //         !p.Pending_Reason?.trim()
-  //       )
-  //     );
-
-  //   });
-
-  //   if (invalidProduct) {
-  //     alert('Please check received quantity and pending reason');
-  //     return;
-  //   }
-
-  //   const requests = products.map((p: any) => {
-
-  //     return this._rest.UpdateVendorChallanReceipt({
-  //       VendorProduct_id: p.VendorProduct_id,
-  //       Received_Quantity: Number(p.Received_Quantity),
-  //       Pending_Reason: p.Pending_Reason
-  //     });
-
-  //   });
-
-  //   if (requests.length === 0) {
-  //     return;
-  //   }
-
-  //   forkJoin(requests).subscribe({
-
-  //     next: (res: any) => {
-
-  //       alert('All Vendor Products Updated Successfully!');
-
-  //       this.vendorproducts.clear();
-
-  //       this.AllchallanDetails(); // Reload your challan list
-
-  //     },
-
-  //     error: (err: any) => {
-
-  //       console.error(err);
-
-  //       alert('Unable to update Vendor Product Quantity');
-
-  //     }
-
-  //   });
-
-  // }
-
-}
-
