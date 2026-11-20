@@ -116,7 +116,7 @@
                                 <tbody>
                                     <tr *ngFor=" let salesorder of AllSalesOrder; let i = index ">
                                         <td> {{ i + 1 }} </td>
-                                        <td> {{ salesorder.Challan_id }}
+                                        <td> {{ salesorder.SalesOrder_id }}
                                             <i class="fa-regular fa-eye i"
                                                 [routerLink]="['/Home/DeletedSalesOrderHistory', salesorder.SalesorderDeleted_id]"
                                                 title="View a SalesOrder Deleted Details"></i>

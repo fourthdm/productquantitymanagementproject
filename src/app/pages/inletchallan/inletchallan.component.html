@@ -4,6 +4,21 @@
     <br>
 
     <div class="row">
+
+        <div class="col-md-4">
+            <label for="Sales_Order_Number"> <b>Select Sales Order Number.</b> <br>
+                <select name="Sales_Order_Number" id="Sales_Order_Number" [(ngModel)]="Sales_Order_Number"
+                    class="form-select" placeholder="Select Sales_Order_Number" aria-label="Multiple select example">
+                    <option *ngFor="let b of AllSalesOrderData" [value]="b.Sales_Order_Number">
+                        {{b.Sales_Order_Number}}</option>
+                </select>
+            </label>
+            <button style="margin-left: 3%;" class="btn btn-success" (click)="DatabySalesorderNumber()">Search</button>
+            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data"><i
+                    class="fa-solid fa-arrows-rotate"></i></button><br>
+        </div>
+        <br>
+
         <div class="col-md-4">
             <label for="Customer_Name"> <b>Select Customer Name.</b> <br>
                 <select name="Customer_Name" id="Customer_Name" [(ngModel)]="Customer_Name" class="form-select"
@@ -17,19 +32,7 @@
                     class="fa-solid fa-arrows-rotate"></i></button><br>
         </div>
         <br>
-        <div class="col-md-4">
-            <label for="Sales_Order_Number"> <b>Select Sales Order Number.</b> <br>
-                <select name="Sales_Order_Number" id="Sales_Order_Number" [(ngModel)]="Sales_Order_Number" class="form-select"
-                    placeholder="Select Sales_Order_Number" aria-label="Multiple select example">
-                    <option *ngFor="let b of AllSalesOrderData" [value]="b.Sales_Order_Number">
-                        {{Sales_Order_Number}}</option>
-                </select>
-            </label>
-            <button style="margin-left: 3%;" class="btn btn-success" (click)="DatabySalesorderNumber()">Search</button>
-            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data"><i
-                    class="fa-solid fa-arrows-rotate"></i></button><br>
-        </div>
-        <br>
+
         <div class="col-md-4">
             <label for="Company_Name"> <b>Select Company Name .</b> <br>
                 <select name="Company_Name" id="Company_Name" [(ngModel)]="Company_Name" class="form-select"
@@ -44,7 +47,7 @@
         </div>
         <br>
 
-        <div class="col-md-4">
+        <div class="col-md-4"> <br>
             <label for="Work_Status"> <b>Select Work Status.</b> <br>
                 <select name="Work_Status" id="Work_Status" [(ngModel)]="Work_Status" class="form-select"
                     placeholder="Select Work_Status" aria-label="Multiple select example">
@@ -56,8 +59,8 @@
                 </select>
             </label>
             <button style="margin-left: 3%;" class="btn btn-success" (click)="DatabyWorkStatus()">Search</button>
-            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data"><i
-                    class="fa-solid fa-arrows-rotate"></i></button><br>
+            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data">
+                <i class="fa-solid fa-arrows-rotate"></i> </button><br>
         </div>
         <br>
 
@@ -87,8 +90,8 @@
                 </select>
             </label>
             <button style="margin-left: 3%;" class="btn btn-success" (click)="DatabyChallanStatus()">Search</button>
-            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data"><i
-                    class="fa-solid fa-arrows-rotate"></i></button><br>
+            <button class="btn btn-secondary" (click)="AllchallanDetails()" title="Reset Challan data">
+                <i class="fa-solid fa-arrows-rotate"></i> </button><br>
         </div>
         <br>
 

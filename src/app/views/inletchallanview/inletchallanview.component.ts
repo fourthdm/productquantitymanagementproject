@@ -150,6 +150,13 @@ export class InletchallanviewComponent {
     product.get('SubTotal')?.setValue(subtotal);
   }
 
+  getTotalStockUsed(items: any[]): number {
+  return (items || []).reduce(
+    (total, item) => total + Number(item.Stock_Used || 0),
+    0
+  );
+}
+
   get items(): FormArray {
     return this.Updateinletchallanfrom.get('items') as FormArray;
   }

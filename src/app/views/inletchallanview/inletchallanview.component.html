@@ -49,18 +49,25 @@
                     <div class="container-fluid">
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered custom-table">
+
                                 <thead>
                                     <tr>
                                         <th>Sr No</th>
                                         <th>Product Name</th>
                                         <th>HSN Code</th>
-                                        <th>Product Quantity</th>
-                                        <th>Ordered Quantity</th>
-                                        <th>Produced Quantity</th>
-                                        <th>Damaged Quantity</th>
-                                        <th>Faulty Quantity</th>
-                                        <th>Good Quantity</th>
-                                        <th>Extra Quantity</th>
+                                        <th>Product Qty</th>
+                                        <th>Ordered Qty</th>
+
+                                        <!-- Extra Stock Details -->
+                                        <th>Available Extra Stock</th>
+                                        <th>Stock Used</th>
+                                        <th>Manufacturing Required</th>
+
+                                        <th>Produced Qty</th>
+                                        <th>Damaged Qty</th>
+                                        <th>Faulty Qty</th>
+                                        <th>Good Qty</th>
+                                        <th>Extra Qty</th>
                                         <th>Rate</th>
                                         <th>Total</th>
                                     </tr>
@@ -73,6 +80,16 @@
                                         <td>{{ item.HSN_Code }}</td>
                                         <td>{{ item.Product_Quantity }}</td>
                                         <td>{{ item.Ordered_Quantity }}</td>
+
+                                        <!-- Extra Stock Details -->
+                                        <td>{{ item.Available_Extra_Stock }}</td>
+                                        <td>
+                                            <b class="text-success">
+                                                {{ item.Stock_Used }}
+                                            </b>
+                                        </td>
+                                        <td>{{ item.Manufacturing_Required }}</td>
+
                                         <td>{{ item.Produced_Quantity }}</td>
                                         <td>{{ item.Damaged_Quantity }}</td>
                                         <td>{{ item.Faulty_Quantity }}</td>
@@ -81,14 +98,19 @@
                                         <td>{{ item.Rate }} &#8377;</td>
                                         <td>{{ item.SubTotal }} &#8377;</td>
                                     </tr>
+
                                 </tbody>
                             </table>
+                            <b>Total Extra Stock Used :</b>
+                            {{ getTotalStockUsed(c.items) }}
+                            <br>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-md-1"></div>
                         <div class="col-md-5">
+
                             <p>
                                 <b>Mode of Transport : </b> {{c.Mode_of_Transport}} <br>
                                 <b>Transporter Name : </b> {{c.Transporter_Name}} <br>

@@ -385,7 +385,7 @@ export class InletchallanComponent {
       } else {
         this.AllChallan = [];
       }
-      this.Company_Name = '';
+      this.Sales_Order_Number = '';
     }, (err: any) => {
       console.log(err);
     })
