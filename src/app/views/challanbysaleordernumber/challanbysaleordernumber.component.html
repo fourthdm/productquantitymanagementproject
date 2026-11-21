@@ -1,7 +1,12 @@
 <div class="container-fluid">
     <br><br> <br>
-    <h3> Inlet Challan By SaleOrder Number </h3><br>
+
     <div class="card maincard">
+        <br>
+        <div class="text-center">
+            <h3> Inlet Challan By SaleOrder Number </h3>
+        </div>
+
         <div class="card-bodys">
             <div class="card cards" *ngFor="let c of AllChallans">
                 <div class="card-header">
@@ -36,6 +41,10 @@
                                         <th>HSN Code</th>
                                         <th>Product Quantity</th>
                                         <th>Ordered Quantity</th>
+                                        <!-- Extra Stock Details -->
+                                        <th>Available Extra Stock</th>
+                                        <th>Stock Used</th>
+                                        <th>Manufacturing Required</th>
                                         <th>Produced Quantity</th>
                                         <th>Damaged Quantity</th>
                                         <th>Faulty Quantity</th>
@@ -53,6 +62,15 @@
                                         <td>{{ item.HSN_Code }}</td>
                                         <td>{{ item.Product_Quantity }}</td>
                                         <td>{{ item.Ordered_Quantity }}</td>
+
+                                        <!-- Extra Stock Details -->
+                                        <td>{{ item.Available_Extra_Stock }}</td>
+                                        <td>
+                                            <b class="text-success">
+                                                {{ item.Stock_Used }}
+                                            </b>
+                                        </td>
+                                        <td>{{ item.Manufacturing_Required }}</td>
                                         <td>{{ item.Produced_Quantity }}</td>
                                         <td>{{ item.Damaged_Quantity }}</td>
                                         <td>{{ item.Faulty_Quantity }}</td>

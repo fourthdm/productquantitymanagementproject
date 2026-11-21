@@ -8,7 +8,8 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-6 col-md-2">
-                    <div class="card cardcount" *ngFor="let t of TotalAdmin" [routerLink]="['/Home/Admin']">
+                    <div class="card cardcount" *ngFor="let t of TotalAdmin" [routerLink]="['/Home/Admin']"
+                        title="View All Admin Data">
                         <div class="card-body">
                             <i class="fa-solid fa-user-gear icon"></i>
 
@@ -19,7 +20,8 @@
                     </div>
                 </div>
                 <div class="col-6 col-md-2">
-                    <div class="card cardcount" *ngFor="let t of TotalCustomer" [routerLink]="['/Home/Customer']">
+                    <div class="card cardcount" *ngFor="let t of TotalCustomer" [routerLink]="['/Home/Customer']"
+                        title="View All Customer Data">
                         <div class="card-body">
                             <i class="fa-solid fa-users icon"></i>
                             <span class="headlinetext"> Customer</span>
@@ -28,7 +30,8 @@
                     </div>
                 </div>
                 <div class="col-6 col-md-2">
-                    <div class="card cardcount" *ngFor="let t of TotalVendor" [routerLink]="['/Home/Vendor']">
+                    <div class="card cardcount" *ngFor="let t of TotalVendor" [routerLink]="['/Home/Vendor']"
+                        title="View All Vendor Data">
                         <div class="card-body">
                             <i class="fa-solid fa-user-shield icon"></i>
                             <span class="headlinetext"> Vendor </span>
@@ -38,9 +41,11 @@
                 </div>
 
                 <div class="col-6 col-md-2">
-                    <div class="card cardcount" *ngFor="let t of TotalSalesorder" [routerLink]="['/Home/SalesOrderList']">
+                    <div class="card cardcount" *ngFor="let t of TotalSalesorder"
+                        [routerLink]="['/Home/SalesOrderList']" title="View All SalesOrder Data">
                         <div class="card-body">
-                            <i class="fa-solid fa-list-check icon"></i>
+                            <i class="fa-solid fa-file-pen icon"></i>
+                            <!-- <i class="fa-solid fa-list-check icon"></i> -->
                             <span class="headlinetext">Sales Order</span>
                             <p class="count">{{t.TotalSalesorder}}</p>
                         </div>
@@ -48,7 +53,8 @@
                 </div>
 
                 <div class="col-6 col-md-2">
-                    <div class="card cardcount" *ngFor="let t of TotalInletChallan" [routerLink]="['/Home/Inletchallan']">
+                    <div class="card cardcount" *ngFor="let t of TotalInletChallan"
+                        [routerLink]="['/Home/Inletchallan']" title="View All InletChallan Data">
                         <div class="card-body">
                             <i class="fa-solid fa-list-check icon"></i>
                             <span class="headlinetext"> Inlet Challan</span>
@@ -58,7 +64,8 @@
                 </div>
 
                 <div class="col-6 col-md-2">
-                    <div class="card cardcount" *ngFor="let t of TotalVendorChallan" [routerLink]="['/Home/OutwardChallan']">
+                    <div class="card cardcount" *ngFor="let t of TotalVendorChallan"
+                        [routerLink]="['/Home/OutwardChallan']" title="View All VendorChallan Data">
                         <div class="card-body">
                             <i class="fa-solid fa-list-check icon"></i>
                             <span class="headlinetext"> Vendor Challan </span>

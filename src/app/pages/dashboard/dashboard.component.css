@@ -46,6 +46,9 @@ a {
 .cardcount {
     height: 90%;
 }
+.cardcount:hover{
+    cursor: pointer;
+}
 
 @font-face {
     font-family: 'CustomFont';
